@@ -1,4 +1,4 @@
-package uk.ac.ebi.eva.transform;
+package uk.ac.ebi.eva.bd2k.transform;
 
 import org.junit.Test;
 import org.opencb.biodata.models.variant.VariantSource;
@@ -12,10 +12,10 @@ import java.net.URI;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static uk.ac.ebi.eva.transform.StudyTransformer.FULL_DATASET_LINK;
-import static uk.ac.ebi.eva.transform.StudyTransformer.INSTRUMENT_PLATFORM;
-import static uk.ac.ebi.eva.transform.StudyTransformer.SPECIES;
-import static uk.ac.ebi.eva.transform.StudyTransformer.TECHNOLOGY_TYPE;
+import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.FULL_DATASET_LINK;
+import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.INSTRUMENT_PLATFORM;
+import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.SPECIES;
+import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.TECHNOLOGY_TYPE;
 
 public class StudyTransformerTest {
     @Test
@@ -46,7 +46,7 @@ public class StudyTransformerTest {
                                                      referenceAssembly, platform, projectUrl, publications, numVariants,
                                                      numSamples);
 
-        StudyTransformer studyTransformer = new StudyTransformer();
+        StudyTransformerImpl studyTransformer = new StudyTransformerImpl();
         Entry entry = studyTransformer.transform(variantStudy);
 
         assertEquals(studyId, entry.getId());
