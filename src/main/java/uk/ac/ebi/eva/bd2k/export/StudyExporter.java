@@ -1,10 +1,17 @@
 package uk.ac.ebi.eva.bd2k.export;
 
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
+import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
 import uk.ac.ebi.eva.bd2k.client.StudyClient;
 import uk.ac.ebi.eva.bd2k.transform.StudyTransformer;
 import uk.ac.ebi.eva.lib.models.VariantStudy;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.time.LocalDate;
+import java.util.Collections;
 
 public class StudyExporter {
 
@@ -14,15 +21,31 @@ public class StudyExporter {
 
     private final OmicsDataMarshaller marshaller;
 
-    public StudyExporter(StudyClient studyClient, StudyTransformer transformer, OmicsDataMarshaller marshaller) {
+    private String outputDirectory;
+
+    public StudyExporter(StudyClient studyClient, StudyTransformer transformer, OmicsDataMarshaller marshaller, String outputDirectory) {
         this.studyClient = studyClient;
         this.transformer = transformer;
         this.marshaller = marshaller;
+        this.outputDirectory = outputDirectory;
     }
 
-    public void export() {
+    public void export() throws FileNotFoundException {
         for (VariantStudy study : studyClient.getAllStudies()) {
-            marshaller.marshall(transformer.transform(study));
+            OutputStream os = new FileOutputStream(outputDirectory + "/" + study.getId() + ".xml");
+            Database database = buildDatabase(study);
+            marshaller.marshall(database, os);
         }
+    }
+
+    // TODO: extract to class
+    private Database buildDatabase(VariantStudy study) {
+        Database database = new Database();
+        // TODO: review those fields
+        database.setName("EVA");
+        database.setRelease("BETA");
+        database.setReleaseDate(LocalDate.now().toString());
+        database.setEntries(Collections.singletonList(transformer.transform(study)));
+        return database;
     }
 }
