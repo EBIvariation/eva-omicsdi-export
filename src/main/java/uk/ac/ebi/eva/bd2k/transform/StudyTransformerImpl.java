@@ -20,7 +20,7 @@ public class StudyTransformerImpl implements StudyTransformer {
         entry.setDescription(variantStudy.getDescription());
         entry.setAuthors(variantStudy.getCenter());
 
-        entry.addAdditionalField(SPECIES, variantStudy.getSpeciesCommonName());
+        entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getType().toString());

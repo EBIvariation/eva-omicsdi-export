@@ -56,8 +56,7 @@ public class StudyTransformerTest {
         // TODO: publication date
         AdditionalFields additionalFields = entry.getAdditionalFields();
         List<Field> fields = additionalFields.getField();
-        // TODO: common name or scientific?
-        assertFieldsContainsAttribute(fields, SPECIES, speciesCommonName);
+        assertFieldsContainsAttribute(fields, SPECIES, speciesScientificName);
         assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, projectUrl.toString());
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, platform);
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, type.toString());
