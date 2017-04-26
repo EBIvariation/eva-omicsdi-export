@@ -1,6 +1,5 @@
 package uk.ac.ebi.eva.bd2k.client;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -32,11 +31,6 @@ public class StudyEvaWSClientTest {
                 Paths.get(this.getClass().getResource("/allStudiesWSResponse.json").toURI())).stream().reduce((s, s2) -> s + s2).get();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
         server.expect(requestTo(STUDY_WS_URL)).andExpect(method(HttpMethod.GET)).andRespond(withSuccess(body, MediaType.APPLICATION_JSON));
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     @Test
