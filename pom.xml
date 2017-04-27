@@ -76,6 +76,11 @@
       <artifactId>jackson-core</artifactId>
       <version>2.8.8</version>
     </dependency>
+    <dependency>
+      <groupId>uk.ac.ebi.ena.sra</groupId>
+      <artifactId>sra-xml</artifactId>
+      <version>1.5.32</version>
+    </dependency>
   </dependencies>
 
   <repositories>
@@ -88,6 +93,11 @@
       <id>pst-snapshots</id>
       <name>EBI Nexus Snapshots Repository</name>
       <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
+    </repository>
+    <repository>
+      <id>oss-sonatype-releases</id>
+      <name>OSS Sonatype Releases</name>
+      <url>https://oss.sonatype.org/content/repositories/releases/</url>
     </repository>
   </repositories>
 </project>
