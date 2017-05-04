@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>uk.ac.ebi.eva</groupId>
-  <artifactId>bd2k-ddi-exporter</artifactId>
+  <artifactId>eva-omicsdi-export</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <properties>
