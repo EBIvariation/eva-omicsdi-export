@@ -111,5 +111,13 @@
       <name>OSS Sonatype Releases</name>
       <url>https://oss.sonatype.org/content/repositories/releases/</url>
     </repository>
+    <repository>
+      <id>eva-snapshots</id>
+      <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+    </repository>
+    <repository>
+      <id>eva-releases</id>
+      <url>https://oss.jfrog.org/artifactory/oss-release-local</url>
+    </repository>
   </repositories>
 </project>
