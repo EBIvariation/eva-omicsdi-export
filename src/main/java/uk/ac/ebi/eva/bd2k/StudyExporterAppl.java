@@ -27,7 +27,7 @@ import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.eva.bd2k.client.StudyEvaWSClient;
 import uk.ac.ebi.eva.bd2k.conf.ExporterConfiguration;
 import uk.ac.ebi.eva.bd2k.export.StudyExporter;
-import uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl;
+import uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl;
 
 import java.io.IOException;
 import java.util.Properties;

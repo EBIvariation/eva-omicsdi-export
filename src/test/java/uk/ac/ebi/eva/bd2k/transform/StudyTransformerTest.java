@@ -22,16 +22,17 @@ import uk.ac.ebi.ddi.xml.validator.parser.model.AdditionalFields;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Field;
 
+import uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl;
 import uk.ac.ebi.eva.lib.models.VariantStudy;
 
 import java.net.URI;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.FULL_DATASET_LINK;
-import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.INSTRUMENT_PLATFORM;
-import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.SPECIES;
-import static uk.ac.ebi.eva.bd2k.transform.StudyTransformerImpl.TECHNOLOGY_TYPE;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.FULL_DATASET_LINK;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.INSTRUMENT_PLATFORM;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.SPECIES;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.TECHNOLOGY_TYPE;
 
 public class StudyTransformerTest {
     @Test

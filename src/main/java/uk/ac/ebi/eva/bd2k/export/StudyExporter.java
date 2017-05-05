@@ -20,7 +20,6 @@ import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
 import uk.ac.ebi.eva.bd2k.client.StudyClient;
-import uk.ac.ebi.eva.bd2k.transform.StudyTransformer;
 import uk.ac.ebi.eva.lib.models.VariantStudy;
 
 import java.io.FileNotFoundException;
