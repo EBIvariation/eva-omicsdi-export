@@ -28,6 +28,7 @@ import uk.ac.ebi.eva.lib.models.VariantStudy;
 import java.util.List;
 
 public class StudyEvaWSClient implements StudyClient {
+    
     private String studyWsUrl;
 
     private RestTemplate restTemplate;
