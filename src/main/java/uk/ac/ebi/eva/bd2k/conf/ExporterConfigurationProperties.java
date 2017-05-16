@@ -13,23 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.conf;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-import java.util.Properties;
+@Component
+@ConfigurationProperties(prefix = "bd2k")
+public class ExporterConfigurationProperties {
 
-public class ExporterConfiguration {
+    private String evaStudiesUrl;
 
-    private static final String EVA_STUDIES_WS_PROPERTY = "eva.studies.url";
+    private String outputDirectory;
 
-    private String evaStudiesWSURL;
-
-    public ExporterConfiguration(Properties properties) {
-        evaStudiesWSURL = properties.getProperty(EVA_STUDIES_WS_PROPERTY);
+    public String getEvaStudiesUrl() {
+        return evaStudiesUrl;
     }
 
-    public String getEvaStudiesWSURL() {
-        return evaStudiesWSURL;
+    public void setEvaStudiesUrl(String evaStudiesUrl) {
+        this.evaStudiesUrl = evaStudiesUrl;
+    }
+
+    public String getOutputDirectory() {
+        return outputDirectory;
+    }
+
+    public void setOutputDirectory(String outputDirectory) {
+        this.outputDirectory = outputDirectory;
     }
 }
