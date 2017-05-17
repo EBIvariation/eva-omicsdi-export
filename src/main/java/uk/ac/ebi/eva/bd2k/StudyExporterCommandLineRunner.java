@@ -34,10 +34,8 @@ public class StudyExporterCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        StudyExporter exporter = new StudyExporter(
-                new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate()),
-                new StudyTransformerImpl(), new OmicsDataMarshaller(),
-                exporterConfiguration.getOutputDirectory());
-        exporter.export();
+        StudyExporter exporter = new StudyExporter(new StudyTransformerImpl(), new OmicsDataMarshaller());
+        StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate());
+        exporter.export(studyEvaWSClient.getAllStudies(), exporterConfiguration.getOutputDirectory());
     }
 }

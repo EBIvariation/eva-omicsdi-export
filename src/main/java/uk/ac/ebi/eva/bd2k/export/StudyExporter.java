@@ -27,26 +27,21 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 
 public class StudyExporter {
-
-    private final StudyClient studyClient;
 
     private final StudyTransformer transformer;
 
     private final OmicsDataMarshaller marshaller;
 
-    private String outputDirectory;
-
-    public StudyExporter(StudyClient studyClient, StudyTransformer transformer, OmicsDataMarshaller marshaller, String outputDirectory) {
-        this.studyClient = studyClient;
+    public StudyExporter(StudyTransformer transformer, OmicsDataMarshaller marshaller) {
         this.transformer = transformer;
         this.marshaller = marshaller;
-        this.outputDirectory = outputDirectory;
     }
 
-    public void export() throws FileNotFoundException {
-        for (VariantStudy study : studyClient.getAllStudies()) {
+    public void export(List<VariantStudy> studies, String outputDirectory) throws FileNotFoundException {
+        for (VariantStudy study : studies) {
             OutputStream os = new FileOutputStream(outputDirectory + "/" + study.getId() + ".xml");
             Database database = buildDatabase(study);
             marshaller.marshall(database, os);
@@ -58,7 +53,7 @@ public class StudyExporter {
         Database database = new Database();
         // TODO: review those fields
         database.setName("EVA");
-        database.setRelease("BETA");
+        database.setRelease(LocalDate.now().toString());
         database.setReleaseDate(LocalDate.now().toString());
         database.setEntries(Collections.singletonList(transformer.transform(study)));
         return database;
