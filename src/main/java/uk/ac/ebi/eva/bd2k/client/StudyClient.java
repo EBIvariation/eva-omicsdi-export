@@ -16,7 +16,8 @@
 
 package uk.ac.ebi.eva.bd2k.client;
 
-import uk.ac.ebi.eva.lib.models.VariantStudy;
+
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.util.List;
 

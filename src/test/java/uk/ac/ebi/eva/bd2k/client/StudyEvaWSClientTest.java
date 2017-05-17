@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.client;
 
 import org.junit.Before;
@@ -23,7 +22,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
-import uk.ac.ebi.eva.lib.models.VariantStudy;
+
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;

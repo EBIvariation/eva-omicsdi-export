@@ -19,8 +19,7 @@ package uk.ac.ebi.eva.bd2k.export;
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
-import uk.ac.ebi.eva.bd2k.client.StudyClient;
-import uk.ac.ebi.eva.lib.models.VariantStudy;
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

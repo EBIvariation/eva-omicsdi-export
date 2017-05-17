@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.transform;
 
 import org.junit.Test;
-import org.opencb.biodata.models.variant.VariantSource;
 import uk.ac.ebi.ddi.xml.validator.parser.model.AdditionalFields;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Field;
 
 import uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl;
-import uk.ac.ebi.eva.lib.models.VariantStudy;
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.net.URI;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.FULL_DATASET_LINK;
 import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.INSTRUMENT_PLATFORM;
 import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.SPECIES;
@@ -39,29 +38,13 @@ public class StudyTransformerTest {
     public void transform() throws Exception {
         String studyName = "Study 1";
         String studyId = "S1";
-        List<VariantSource> sources = null;
         String studyDescription = "This is the study 1";
-        int[] taxonomyId = null;
-        String speciesCommonName = "Human";
         String speciesScientificName = "Homo sapiens";
-        String sourceType = null;
         String center = "EBI";
-        String material = "DNA";
-        String scope = null;
-        VariantStudy.StudyType type = VariantStudy.StudyType.CASE_CONTROL;
-        String experimentType = "Whole Genome Sequencing";
-        String experimentTypeAbbrevation = "WGS";
-        String referenceAssembly = "Grch37";
+        String type = "Case-Control";
         String platform = "Illumina";
         URI projectUrl = new URI("http://www.study1.org");
-        String[] publications = null;
-        int numVariants = 1000000;
-        int numSamples = 10;
-        VariantStudy variantStudy = new VariantStudy(studyName, studyId, sources, studyDescription, taxonomyId,
-                                                     speciesCommonName, speciesScientificName, sourceType, center, material,
-                                                     scope, type, experimentType, experimentTypeAbbrevation,
-                                                     referenceAssembly, platform, projectUrl, publications, numVariants,
-                                                     numSamples);
+        VariantStudy variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl, platform, type);
 
         StudyTransformerImpl studyTransformer = new StudyTransformerImpl();
         Entry entry = studyTransformer.transform(variantStudy);
@@ -76,7 +59,7 @@ public class StudyTransformerTest {
         assertFieldsContainsAttribute(fields, SPECIES, speciesScientificName);
         assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, projectUrl.toString());
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, platform);
-        assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, type.toString());
+        assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, type);
         // TODO: publications
     }
 

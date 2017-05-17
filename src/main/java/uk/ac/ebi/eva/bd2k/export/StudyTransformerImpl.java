@@ -18,7 +18,8 @@ package uk.ac.ebi.eva.bd2k.export;
 
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
-import uk.ac.ebi.eva.lib.models.VariantStudy;
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
+
 
 public class StudyTransformerImpl implements StudyTransformer {
 
@@ -39,7 +40,7 @@ public class StudyTransformerImpl implements StudyTransformer {
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
-        entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getType().toString());
+        entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getType());
 
         return entry;
     }

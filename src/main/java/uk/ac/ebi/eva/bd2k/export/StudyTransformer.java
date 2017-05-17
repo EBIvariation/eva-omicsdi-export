@@ -18,7 +18,8 @@ package uk.ac.ebi.eva.bd2k.export;
 
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
-import uk.ac.ebi.eva.lib.models.VariantStudy;
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
+
 
 public interface StudyTransformer {
     Entry transform (VariantStudy variantStudy);
