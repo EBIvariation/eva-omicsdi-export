@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 
 
-public class StudyTransformerImpl extends StudyTransformer {
+public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     public static final String SPECIES = "species";
     public static final String FULL_DATASET_LINK = "full_dataset_link";

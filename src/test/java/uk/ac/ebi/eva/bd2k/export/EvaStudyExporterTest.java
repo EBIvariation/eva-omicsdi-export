@@ -35,7 +35,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 
-public class StudyExporterTest {
+public class EvaStudyExporterTest {
 
     @Mock
     private OmicsDataMarshaller marshaller;
@@ -60,7 +60,7 @@ public class StudyExporterTest {
 
     @Test
     public void export() throws Exception {
-        StudyExporter exporter = new StudyExporter(new StudyTransformerImpl(), marshaller);
+        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(), marshaller);
         String outputDirectory ="/tmp";
         exporter.export(Arrays.asList(study1, study2), outputDirectory);
 
@@ -71,8 +71,8 @@ public class StudyExporterTest {
                 .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(STUDY_2_ID)),
                           any(OutputStream.class));
 
-        assertEquals(outputDirectory + "/" + STUDY_1_ID + ".xml", exporter.getOutputFileName(STUDY_1_ID));
-        assertEquals(outputDirectory + "/" + STUDY_2_ID + ".xml", exporter.getOutputFileName(STUDY_2_ID));
+        assertEquals(outputDirectory + "/" + STUDY_1_ID + ".xml", exporter.getFileName(study1));
+        assertEquals(outputDirectory + "/" + STUDY_2_ID + ".xml", exporter.getFileName(study2));
     }
 
 

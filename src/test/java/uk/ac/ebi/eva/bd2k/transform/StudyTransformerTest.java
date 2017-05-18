@@ -21,7 +21,7 @@ import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Field;
 
-import uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl;
+import uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.net.URI;
@@ -30,10 +30,10 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.FULL_DATASET_LINK;
-import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.INSTRUMENT_PLATFORM;
-import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.SPECIES;
-import static uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl.TECHNOLOGY_TYPE;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.INSTRUMENT_PLATFORM;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
 
 public class StudyTransformerTest {
     @Test
@@ -48,7 +48,7 @@ public class StudyTransformerTest {
         URI projectUrl = new URI("http://www.study1.org");
         VariantStudy variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl, platform, type);
 
-        StudyTransformerImpl studyTransformer = new StudyTransformerImpl();
+        EvaStudyTransformer studyTransformer = new EvaStudyTransformer();
         Database database = studyTransformer.transform(variantStudy);
 
         assertEquals("EVA", database.getName());

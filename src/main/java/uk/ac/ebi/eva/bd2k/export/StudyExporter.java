@@ -18,38 +18,39 @@ package uk.ac.ebi.eva.bd2k.export;
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
-import uk.ac.ebi.eva.bd2k.model.VariantStudy;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class StudyExporter {
+public abstract class StudyExporter<T> {
 
-    private final StudyTransformer transformer;
+    private final StudyTransformer<T> transformer;
 
     private final OmicsDataMarshaller marshaller;
 
-    private Map<String, String> outputFileNames;
+    private Map<T, String> outputFileNames;
 
-    public StudyExporter(StudyTransformer transformer, OmicsDataMarshaller marshaller) {
+    public StudyExporter(StudyTransformer<T> transformer, OmicsDataMarshaller marshaller) {
         this.transformer = transformer;
         this.marshaller = marshaller;
-        outputFileNames = new HashMap<>();
+        outputFileNames = new HashMap<T, String>();
     }
 
-    public void export(List<VariantStudy> studies, String outputDirectory) throws FileNotFoundException {
-        for (VariantStudy study : studies) {
+    public void export(List<T> studies, String outputDirectory) throws FileNotFoundException {
+        for (T study : studies) {
             Database database = transformer.transform(study);
-            String outputFileName = outputDirectory + "/" + study.getId() + ".xml";
-            outputFileNames.put(study.getId(), outputFileName);
-            marshaller.marshall(database, new FileOutputStream(outputFileName));
+            String studyOutputFileName = getFileName(outputDirectory, study);
+            outputFileNames.put(study, studyOutputFileName);
+            marshaller.marshall(database, new FileOutputStream(studyOutputFileName));
         }
     }
 
-    public String getOutputFileName(String study) {
+    protected abstract String getFileName(String outputDirectory, T study);
+
+    protected String getFileName(T study) {
         return outputFileNames.get(study);
     }
+
 }

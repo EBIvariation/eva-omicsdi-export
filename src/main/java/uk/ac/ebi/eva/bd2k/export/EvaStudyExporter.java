@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package uk.ac.ebi.eva.bd2k.export;
 
-import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
-import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
+import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
-public abstract class StudyTransformer<T> {
+public class EvaStudyExporter extends StudyExporter<VariantStudy> {
 
-    public Database transform (T study){
-        Entry entry = transformStudy(study);
-        Database database = buildSingleEntryDatabase(entry);
-        return database;
+    public EvaStudyExporter(StudyTransformer<VariantStudy> transformer,
+                            OmicsDataMarshaller marshaller) {
+        super(transformer, marshaller);
     }
 
-    protected abstract Entry transformStudy(T study);
-
-    protected abstract Database buildSingleEntryDatabase(Entry entry);
-
+    @Override
+    protected String getFileName(String outputDirectory, VariantStudy study) {
+        return outputDirectory + "/" + study.getId() + ".xml";
+    }
 }

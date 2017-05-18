@@ -23,8 +23,10 @@ import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 
 import uk.ac.ebi.eva.bd2k.client.StudyEvaWSClient;
 import uk.ac.ebi.eva.bd2k.conf.ExporterConfigurationProperties;
+import uk.ac.ebi.eva.bd2k.export.EvaStudyExporter;
 import uk.ac.ebi.eva.bd2k.export.StudyExporter;
-import uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl;
+import uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer;
+import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 @Component
 public class StudyExporterCommandLineRunner implements CommandLineRunner {
@@ -34,7 +36,7 @@ public class StudyExporterCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        StudyExporter exporter = new StudyExporter(new StudyTransformerImpl(), new OmicsDataMarshaller());
+        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(), new OmicsDataMarshaller());
         StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate());
         exporter.export(studyEvaWSClient.getAllStudies(), exporterConfiguration.getOutputDirectory());
     }
