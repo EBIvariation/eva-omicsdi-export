@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.export;
 
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
@@ -23,8 +22,6 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,22 +42,11 @@ public class StudyExporter {
 
     public void export(List<VariantStudy> studies, String outputDirectory) throws FileNotFoundException {
         for (VariantStudy study : studies) {
-            Database database = buildDatabase(study);
+            Database database = transformer.transform(study);
             String outputFileName = outputDirectory + "/" + study.getId() + ".xml";
             outputFileNames.put(study.getId(), outputFileName);
             marshaller.marshall(database, new FileOutputStream(outputFileName));
         }
-    }
-
-    // TODO: extract to class
-    private Database buildDatabase(VariantStudy study) {
-        Database database = new Database();
-        // TODO: review those fields
-        database.setName("EVA");
-        database.setRelease(LocalDate.now().toString());
-        database.setReleaseDate(LocalDate.now().toString());
-        database.setEntries(Collections.singletonList(transformer.transform(study)));
-        return database;
     }
 
     public String getOutputFileName(String study) {

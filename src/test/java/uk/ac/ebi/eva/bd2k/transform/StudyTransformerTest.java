@@ -17,6 +17,7 @@ package uk.ac.ebi.eva.bd2k.transform;
 
 import org.junit.Test;
 import uk.ac.ebi.ddi.xml.validator.parser.model.AdditionalFields;
+import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Field;
 
@@ -24,6 +25,7 @@ import uk.ac.ebi.eva.bd2k.export.StudyTransformerImpl;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -47,8 +49,14 @@ public class StudyTransformerTest {
         VariantStudy variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl, platform, type);
 
         StudyTransformerImpl studyTransformer = new StudyTransformerImpl();
-        Entry entry = studyTransformer.transform(variantStudy);
+        Database database = studyTransformer.transform(variantStudy);
 
+        assertEquals("EVA", database.getName());
+        assertEquals(LocalDate.now().toString(), database.getRelease());
+        assertEquals(LocalDate.now().toString(), database.getReleaseDate());
+        assertEquals(1, database.getEntryCount().intValue());
+
+        Entry entry = database.getEntries().getEntry().get(0);
         assertEquals(studyId, entry.getId());
         assertEquals(studyName, entry.getName().getValue());
         assertEquals(studyDescription, entry.getDescription());

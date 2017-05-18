@@ -13,14 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.export;
 
+import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
+public abstract class StudyTransformer {
 
-public interface StudyTransformer {
-    Entry transform (VariantStudy variantStudy);
+    public Database transform (VariantStudy variantStudy){
+        Entry entry = transformStudy(variantStudy);
+        Database database = buildSingleEntryDatabase(entry);
+        return database;
+    }
+
+    protected abstract Entry transformStudy(VariantStudy variantStudy);
+
+    protected abstract Database buildSingleEntryDatabase(Entry entry);
+
 }

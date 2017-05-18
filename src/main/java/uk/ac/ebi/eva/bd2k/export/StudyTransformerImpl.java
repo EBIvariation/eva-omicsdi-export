@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.export;
 
+import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
+import java.time.LocalDate;
+import java.util.Collections;
 
-public class StudyTransformerImpl implements StudyTransformer {
+
+public class StudyTransformerImpl extends StudyTransformer {
 
     public static final String SPECIES = "species";
     public static final String FULL_DATASET_LINK = "full_dataset_link";
@@ -29,7 +32,7 @@ public class StudyTransformerImpl implements StudyTransformer {
     public static final String TECHNOLOGY_TYPE = "technology_type";
 
     @Override
-    public Entry transform(VariantStudy variantStudy) {
+    protected Entry transformStudy(VariantStudy variantStudy) {
         Entry entry = new Entry();
 
         entry.setId(variantStudy.getId());
@@ -43,5 +46,18 @@ public class StudyTransformerImpl implements StudyTransformer {
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getType());
 
         return entry;
+    }
+
+    @Override
+    protected Database buildSingleEntryDatabase(Entry entry) {
+        Database database = new Database();
+
+        database.setName("EVA");
+        database.setRelease(LocalDate.now().toString());
+        database.setReleaseDate(LocalDate.now().toString());
+        database.setEntries(Collections.singletonList(entry));
+        database.setEntryCount(1);
+
+        return database;
     }
 }
