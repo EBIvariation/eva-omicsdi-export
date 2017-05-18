@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -60,8 +61,8 @@ public class StudyExporterTest {
     @Test
     public void export() throws Exception {
         StudyExporter exporter = new StudyExporter(new StudyTransformerImpl(), marshaller);
-
-        exporter.export(Arrays.asList(study1, study2), "/tmp");
+        String outputDirectory ="/tmp";
+        exporter.export(Arrays.asList(study1, study2), outputDirectory);
 
         verify(marshaller, times(1))
                 .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(STUDY_1_ID)),
@@ -69,6 +70,9 @@ public class StudyExporterTest {
         verify(marshaller, times(1))
                 .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(STUDY_2_ID)),
                           any(OutputStream.class));
+
+        assertEquals(outputDirectory + "/" + STUDY_1_ID + ".xml", exporter.getOutputFileName(STUDY_1_ID));
+        assertEquals(outputDirectory + "/" + STUDY_2_ID + ".xml", exporter.getOutputFileName(STUDY_2_ID));
     }
 
 

@@ -23,10 +23,11 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class StudyExporter {
 
@@ -34,16 +35,20 @@ public class StudyExporter {
 
     private final OmicsDataMarshaller marshaller;
 
+    private Map<String, String> outputFileNames;
+
     public StudyExporter(StudyTransformer transformer, OmicsDataMarshaller marshaller) {
         this.transformer = transformer;
         this.marshaller = marshaller;
+        outputFileNames = new HashMap<>();
     }
 
     public void export(List<VariantStudy> studies, String outputDirectory) throws FileNotFoundException {
         for (VariantStudy study : studies) {
-            OutputStream os = new FileOutputStream(outputDirectory + "/" + study.getId() + ".xml");
             Database database = buildDatabase(study);
-            marshaller.marshall(database, os);
+            String outputFileName = outputDirectory + "/" + study.getId() + ".xml";
+            outputFileNames.put(study.getId(), outputFileName);
+            marshaller.marshall(database, new FileOutputStream(outputFileName));
         }
     }
 
@@ -56,5 +61,9 @@ public class StudyExporter {
         database.setReleaseDate(LocalDate.now().toString());
         database.setEntries(Collections.singletonList(transformer.transform(study)));
         return database;
+    }
+
+    public String getOutputFileName(String study) {
+        return outputFileNames.get(study);
     }
 }
