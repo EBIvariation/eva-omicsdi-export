@@ -17,17 +17,21 @@ package uk.ac.ebi.eva.bd2k.client;
 
 import org.opencb.datastore.core.QueryResponse;
 import org.opencb.datastore.core.QueryResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
 
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.util.List;
 
 public class StudyEvaWSClient implements StudyClient {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudyEvaWSClient.class);
 
     private String studyWsUrl;
 
@@ -40,11 +44,17 @@ public class StudyEvaWSClient implements StudyClient {
 
     @Override
     public List<VariantStudy> getAllStudies() {
-        ResponseEntity<QueryResponse<QueryResult<VariantStudy>>> response = restTemplate
-                .exchange(studyWsUrl, HttpMethod.GET, null,
-                          new ParameterizedTypeReference<QueryResponse<QueryResult<VariantStudy>>>() {
-                          });
-        QueryResult<VariantStudy> queryResult = response.getBody().getResponse().get(0);
-        return queryResult.getResult();
+        try {
+            logger.info("Retrieving all EVA studies from {} ...", studyWsUrl);
+            ResponseEntity<QueryResponse<QueryResult<VariantStudy>>> response = restTemplate
+                    .exchange(studyWsUrl, HttpMethod.GET, null,
+                              new ParameterizedTypeReference<QueryResponse<QueryResult<VariantStudy>>>() {
+                              });
+            QueryResult<VariantStudy> queryResult = response.getBody().getResponse().get(0);
+            return queryResult.getResult();
+        } catch (RestClientException e) {
+            logger.error("Error retrieving EVA studies: {}", e.getMessage());
+            throw e;
+        }
     }
 }

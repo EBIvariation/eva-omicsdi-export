@@ -18,7 +18,6 @@ package uk.ac.ebi.eva.bd2k.export;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
-
 public abstract class StudyTransformer<T> {
 
     public Database transform (T study){

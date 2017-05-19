@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package uk.ac.ebi.eva.bd2k.export;
 
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;

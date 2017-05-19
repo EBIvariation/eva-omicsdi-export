@@ -25,7 +25,6 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 import java.time.LocalDate;
 import java.util.Collections;
 
-
 public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     private static final Logger logger = LoggerFactory.getLogger(EvaStudyTransformer.class);

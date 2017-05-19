@@ -39,16 +39,20 @@ public abstract class StudyExporter<T> {
     public StudyExporter(StudyTransformer<T> transformer, OmicsDataMarshaller marshaller) {
         this.transformer = transformer;
         this.marshaller = marshaller;
-        outputFileNames = new HashMap<T, String>();
+        outputFileNames = new HashMap<>();
     }
 
-    public void export(List<T> studies, String outputDirectory) throws FileNotFoundException {
+    public void export(List<T> studies, String outputDirectory) {
         logger.info("Exporting {} studies to {} ...", studies.size(), outputDirectory);
-        for (T study : studies) {
-            Database database = transformer.transform(study);
-            String studyOutputFileName = getFileName(outputDirectory, study);
-            outputFileNames.put(study, studyOutputFileName);
-            marshaller.marshall(database, new FileOutputStream(studyOutputFileName));
+        try {
+            for (T study : studies) {
+                Database database = transformer.transform(study);
+                String studyOutputFileName = getFileName(outputDirectory, study);
+                outputFileNames.put(study, studyOutputFileName);
+                marshaller.marshall(database, new FileOutputStream(studyOutputFileName));
+            }
+        } catch (FileNotFoundException e) {
+            logger.error("Cannot create output file: {}", e.getMessage());
         }
         logger.info("Done");
     }
