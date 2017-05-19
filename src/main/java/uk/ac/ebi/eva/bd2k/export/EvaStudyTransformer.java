@@ -15,6 +15,8 @@
  */
 package uk.ac.ebi.eva.bd2k.export;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
@@ -26,13 +28,19 @@ import java.util.Collections;
 
 public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
+    private static final Logger logger = LoggerFactory.getLogger(EvaStudyTransformer.class);
+
     public static final String SPECIES = "species";
+
     public static final String FULL_DATASET_LINK = "full_dataset_link";
+
     public static final String INSTRUMENT_PLATFORM = "instrument_platform";
+
     public static final String TECHNOLOGY_TYPE = "technology_type";
 
     @Override
     protected Entry transformStudy(VariantStudy variantStudy) {
+        logger.info("Transforming EVA study {} ...", variantStudy.getId());
         Entry entry = new Entry();
 
         entry.setId(variantStudy.getId());

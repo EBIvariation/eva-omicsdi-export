@@ -15,6 +15,8 @@
  */
 package uk.ac.ebi.eva.bd2k.export;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
@@ -25,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class StudyExporter<T> {
+
+    private static final Logger logger = LoggerFactory.getLogger(StudyExporter.class);
 
     private final StudyTransformer<T> transformer;
 
@@ -39,12 +43,14 @@ public abstract class StudyExporter<T> {
     }
 
     public void export(List<T> studies, String outputDirectory) throws FileNotFoundException {
+        logger.info("Exporting {} studies to {} ...", studies.size(), outputDirectory);
         for (T study : studies) {
             Database database = transformer.transform(study);
             String studyOutputFileName = getFileName(outputDirectory, study);
             outputFileNames.put(study, studyOutputFileName);
             marshaller.marshall(database, new FileOutputStream(studyOutputFileName));
         }
+        logger.info("Done");
     }
 
     protected abstract String getFileName(String outputDirectory, T study);
