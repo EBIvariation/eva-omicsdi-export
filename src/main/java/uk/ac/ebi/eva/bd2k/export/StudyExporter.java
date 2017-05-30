@@ -43,7 +43,7 @@ public abstract class StudyExporter<T> {
         outputFileNames = new HashMap<>();
     }
 
-    public void export(List<T> studies, String outputDirectory) {
+    public void export(List<T> studies, Path outputDirectory) {
         logger.info("Exporting {} studies to {} ...", studies.size(), outputDirectory);
         try {
             for (T study : studies) {
@@ -58,7 +58,7 @@ public abstract class StudyExporter<T> {
         }
     }
 
-    protected abstract Path getStudyOutputFilePath(String outputDirectory, T study);
+    protected abstract Path getStudyOutputFilePath(Path outputDirectory, T study);
 
     protected Path getStudyOutputFilePath(T study) {
         return outputFileNames.get(study);

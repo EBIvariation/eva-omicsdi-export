@@ -28,6 +28,8 @@ import uk.ac.ebi.eva.bd2k.export.StudyExporter;
 import uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
+import java.nio.file.Paths;
+
 @Component
 public class StudyExporterCommandLineRunner implements CommandLineRunner {
 
@@ -38,6 +40,6 @@ public class StudyExporterCommandLineRunner implements CommandLineRunner {
     public void run(String... strings) throws Exception {
         StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(), new OmicsDataMarshaller());
         StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate());
-        exporter.export(studyEvaWSClient.getAllStudies(), exporterConfiguration.getOutputDirectory());
+        exporter.export(studyEvaWSClient.getAllStudies(), Paths.get(exporterConfiguration.getOutputDirectory()));
     }
 }
