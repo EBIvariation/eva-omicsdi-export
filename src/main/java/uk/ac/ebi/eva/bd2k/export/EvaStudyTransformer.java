@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 
 /**
- * EVA Studies omicsDI transformer
+ * Transforms EVA study objects into Database objects from the OmicsDI model.
  */
 public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 

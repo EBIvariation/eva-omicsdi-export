@@ -22,7 +22,7 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 import java.nio.file.Path;
 
 /**
- * EVA Studies omicsDI exporter
+ * Exports EVA studies into a format compatible with OmicsDI.
  */
 public class EvaStudyExporter extends StudyExporter<VariantStudy> {
 
