@@ -16,7 +16,9 @@
 package uk.ac.ebi.eva.bd2k.export;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.mockito.Mock;
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
@@ -25,7 +27,11 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
@@ -47,6 +53,9 @@ public class EvaStudyExporterTest {
 
     private VariantStudy study2;
 
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
     @Before
     public void setUp() throws Exception {
         study1 = new VariantStudy(STUDY_1_ID, "study 1", "Study 1 desc", "EBI", "Homo Sapiens",
@@ -60,7 +69,8 @@ public class EvaStudyExporterTest {
     @Test
     public void export() throws Exception {
         StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(), marshaller);
-        String outputDirectory ="/tmp";
+        System.out.println("temporaryFolder = " + temporaryFolder.getRoot().toString());
+        String outputDirectory = temporaryFolder.getRoot().toString();
         exporter.export(Arrays.asList(study1, study2), outputDirectory);
 
         verify(marshaller, times(1))
@@ -70,9 +80,8 @@ public class EvaStudyExporterTest {
                 .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(STUDY_2_ID)),
                           any(OutputStream.class));
 
-        assertEquals(outputDirectory + "/" + STUDY_1_ID + ".xml", exporter.getFileName(study1));
-        assertEquals(outputDirectory + "/" + STUDY_2_ID + ".xml", exporter.getFileName(study2));
+        assertEquals(Paths.get(outputDirectory, STUDY_1_ID + ".xml"), exporter.getStudyOutputFilePath(study1));
+        assertEquals(Paths.get(outputDirectory, STUDY_2_ID + ".xml"), exporter.getStudyOutputFilePath(study2));
     }
-
 
 }

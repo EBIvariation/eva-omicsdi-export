@@ -22,6 +22,7 @@ import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public abstract class StudyExporter<T> {
 
     private final OmicsDataMarshaller marshaller;
 
-    private Map<T, String> outputFileNames;
+    private Map<T, Path> outputFileNames;
 
     public StudyExporter(StudyTransformer<T> transformer, OmicsDataMarshaller marshaller) {
         this.transformer = transformer;
@@ -47,9 +48,9 @@ public abstract class StudyExporter<T> {
         try {
             for (T study : studies) {
                 Database database = transformer.transform(study);
-                String studyOutputFileName = getFileName(outputDirectory, study);
-                outputFileNames.put(study, studyOutputFileName);
-                marshaller.marshall(database, new FileOutputStream(studyOutputFileName));
+                Path studyOutputFilePath = getStudyOutputFilePath(outputDirectory, study);
+                outputFileNames.put(study, studyOutputFilePath);
+                marshaller.marshall(database, new FileOutputStream(studyOutputFilePath.toFile()));
             }
             logger.info("Done");
         } catch (FileNotFoundException e) {
@@ -57,9 +58,9 @@ public abstract class StudyExporter<T> {
         }
     }
 
-    protected abstract String getFileName(String outputDirectory, T study);
+    protected abstract Path getStudyOutputFilePath(String outputDirectory, T study);
 
-    protected String getFileName(T study) {
+    protected Path getStudyOutputFilePath(T study) {
         return outputFileNames.get(study);
     }
 

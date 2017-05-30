@@ -19,6 +19,9 @@ import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class EvaStudyExporter extends StudyExporter<VariantStudy> {
 
     public EvaStudyExporter(StudyTransformer<VariantStudy> transformer,
@@ -27,7 +30,7 @@ public class EvaStudyExporter extends StudyExporter<VariantStudy> {
     }
 
     @Override
-    protected String getFileName(String outputDirectory, VariantStudy study) {
-        return outputDirectory + "/" + study.getId() + ".xml";
+    protected Path getStudyOutputFilePath(String outputDirectory, VariantStudy study) {
+        return Paths.get(outputDirectory, study.getId() + ".xml");
     }
 }
