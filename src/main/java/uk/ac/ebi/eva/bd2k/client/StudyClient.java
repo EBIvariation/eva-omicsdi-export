@@ -19,7 +19,11 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.util.List;
 
+/**
+ * Interface that represents a client that retrieves all the studies from a Service
+ */
 public interface StudyClient {
 
     List<VariantStudy> getAllStudies();
+
 }

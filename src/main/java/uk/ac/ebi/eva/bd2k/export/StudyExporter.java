@@ -27,6 +27,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Generic omicsDI exporter that serialize studies in XML files
+ * @param <T> Study class
+ */
 public abstract class StudyExporter<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(StudyExporter.class);

@@ -17,6 +17,9 @@ package uk.ac.ebi.eva.bd2k.model;
 
 import java.net.URI;
 
+/**
+ * Each object of this class represents a EVA study
+ */
 public class VariantStudy {
 
     private String id;

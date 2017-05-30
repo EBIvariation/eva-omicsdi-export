@@ -18,6 +18,10 @@ package uk.ac.ebi.eva.bd2k.export;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
+/**
+ * A generic class that transform studies into "Database" omicsDI objects
+ * @param <T> Study class
+ */
 public abstract class StudyTransformer<T> {
 
     public Database transform (T study){

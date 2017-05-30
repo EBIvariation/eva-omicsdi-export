@@ -29,6 +29,9 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.util.List;
 
+/**
+ * Client to retrieve all the studies from the EVA REST API
+ */
 public class StudyEvaWSClient implements StudyClient {
 
     private static final Logger logger = LoggerFactory.getLogger(StudyEvaWSClient.class);

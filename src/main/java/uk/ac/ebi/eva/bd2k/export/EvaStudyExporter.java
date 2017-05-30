@@ -21,6 +21,9 @@ import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.nio.file.Path;
 
+/**
+ * EVA Studies omicsDI exporter
+ */
 public class EvaStudyExporter extends StudyExporter<VariantStudy> {
 
     public EvaStudyExporter(StudyTransformer<VariantStudy> transformer,
