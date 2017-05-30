@@ -19,7 +19,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "bd2k")
+@ConfigurationProperties(prefix = "omicsdi")
 public class ExporterConfigurationProperties {
 
     private String evaStudiesUrl;
