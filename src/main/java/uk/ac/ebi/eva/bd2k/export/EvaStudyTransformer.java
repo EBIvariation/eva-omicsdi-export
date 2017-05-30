@@ -39,7 +39,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     @Override
     protected Entry transformStudy(VariantStudy variantStudy) {
-        logger.info("Transforming EVA study {} ...", variantStudy.getId());
+        logger.info("Transforming study {} ...", variantStudy.getId());
         Entry entry = new Entry();
 
         entry.setId(variantStudy.getId());

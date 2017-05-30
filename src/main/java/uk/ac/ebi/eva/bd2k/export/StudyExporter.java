@@ -51,10 +51,10 @@ public abstract class StudyExporter<T> {
                 outputFileNames.put(study, studyOutputFileName);
                 marshaller.marshall(database, new FileOutputStream(studyOutputFileName));
             }
+            logger.info("Done");
         } catch (FileNotFoundException e) {
             logger.error("Cannot create output file: {}", e.getMessage());
         }
-        logger.info("Done");
     }
 
     protected abstract String getFileName(String outputDirectory, T study);

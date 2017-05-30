@@ -45,7 +45,7 @@ public class StudyEvaWSClient implements StudyClient {
     @Override
     public List<VariantStudy> getAllStudies() {
         try {
-            logger.info("Retrieving all EVA studies from {} ...", studyWsUrl);
+            logger.info("Retrieving all studies from {} ...", studyWsUrl);
             ResponseEntity<QueryResponse<QueryResult<VariantStudy>>> response = restTemplate
                     .exchange(studyWsUrl, HttpMethod.GET, null,
                               new ParameterizedTypeReference<QueryResponse<QueryResult<VariantStudy>>>() {
@@ -53,7 +53,7 @@ public class StudyEvaWSClient implements StudyClient {
             QueryResult<VariantStudy> queryResult = response.getBody().getResponse().get(0);
             return queryResult.getResult();
         } catch (RestClientException e) {
-            logger.error("Error retrieving EVA studies: {}", e.getMessage());
+            logger.error("Error retrieving studies: {}", e.getMessage());
             throw e;
         }
     }

@@ -36,6 +36,7 @@ import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
 
 public class StudyTransformerTest {
+
     @Test
     public void transform() throws Exception {
         String studyName = "Study 1";
