@@ -53,7 +53,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
-        entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getType());
+        entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getExperimentType());
 
         return entry;
     }

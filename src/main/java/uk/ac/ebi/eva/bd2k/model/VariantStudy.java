@@ -36,13 +36,13 @@ public class VariantStudy {
 
     private String platform;
 
-    private String type;
+    private String experimentType;
 
     public VariantStudy() {
     }
 
     public VariantStudy(String id, String name, String description, String center, String speciesScientificName,
-                        URI url, String platform, String type) {
+                        URI url, String platform, String experimentType) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -50,7 +50,7 @@ public class VariantStudy {
         this.speciesScientificName = speciesScientificName;
         this.url = url;
         this.platform = platform;
-        this.type = type;
+        this.experimentType = experimentType;
     }
 
     public String getId() {
@@ -109,12 +109,12 @@ public class VariantStudy {
         this.platform = platform;
     }
 
-    public String getType() {
-        return type;
+    public String getExperimentType() {
+        return experimentType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setExperimentType(String experimentType) {
+        this.experimentType = experimentType;
     }
 
     @Override
