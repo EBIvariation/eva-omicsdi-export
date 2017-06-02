@@ -38,12 +38,12 @@ public class ProjectHttpMessageConverter implements HttpMessageConverter<Project
         try {
             ObjectType xmlDocument = ObjectType.Factory.parse(httpInputMessage.getBody());
 
-            // create a cursor over the XML document and look for the "PROJECT" node
+            // create a cursor over the XML document and go to the "PROJECT" node, the only child of the root one
             XmlCursor xmlCursor = xmlDocument.newCursor();
-            // TODO: Search by node name instead of using "toFirstChild calls"
-            xmlCursor.toFirstChild();
+            xmlCursor.toFirstContentToken();
             xmlCursor.toFirstChild();
 
+            // parse the "PROJECT" node
             PROJECTDocument document = PROJECTDocument.Factory.parse(xmlCursor.xmlText());
             return document.getPROJECT();
         } catch (XmlException e) {

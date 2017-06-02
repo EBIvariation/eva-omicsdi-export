@@ -34,13 +34,15 @@ public class ProjectEnaWSClientTest {
 
     @Before
     public void setUp() throws Exception {
-        restTemplate = new RestTemplate();
-        String body = Files.readAllLines(
+        String xmlTestFileBody = Files.readAllLines(
                 Paths.get(this.getClass().getResource("/projectWSResponse.xml").toURI())).stream()
                            .reduce((s, s2) -> s + s2).get();
+
+        restTemplate = new RestTemplate();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+
         server.expect(requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID))).andExpect(method(HttpMethod.GET))
-              .andRespond(withSuccess(body, MediaType.APPLICATION_XML));
+              .andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
     }
 
     @Test
