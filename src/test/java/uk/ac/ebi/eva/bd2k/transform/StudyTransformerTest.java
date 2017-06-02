@@ -15,13 +15,16 @@
  */
 package uk.ac.ebi.eva.bd2k.transform;
 
+import org.junit.Before;
 import org.junit.Test;
 import uk.ac.ebi.ddi.xml.validator.parser.model.AdditionalFields;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Field;
 
+import uk.ac.ebi.eva.bd2k.client.ProjectClient;
 import uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer;
+import uk.ac.ebi.eva.bd2k.model.EnaProject;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.net.URI;
@@ -32,10 +35,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.INSTRUMENT_PLATFORM;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE_TAG;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
 
 public class StudyTransformerTest {
+
+    public static final String PUBLICATION_DATE = "2017-01-01";
+
+    private ProjectClient projectClientMock;
+
+    @Before
+    public void setUp() throws Exception {
+        projectClientMock = projectId -> new EnaProject(projectId, PUBLICATION_DATE);
+    }
 
     @Test
     public void transform() throws Exception {
@@ -49,7 +62,8 @@ public class StudyTransformerTest {
         URI projectUrl = new URI("http://www.study1.org");
         VariantStudy variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl, platform, type);
 
-        EvaStudyTransformer studyTransformer = new EvaStudyTransformer();
+        EvaStudyTransformer studyTransformer = new EvaStudyTransformer(projectClientMock);
+
         Database database = studyTransformer.transform(variantStudy);
 
         assertEquals("EVA", database.getName());
@@ -62,7 +76,8 @@ public class StudyTransformerTest {
         assertEquals(studyName, entry.getName().getValue());
         assertEquals(studyDescription, entry.getDescription());
         assertEquals(center, entry.getAuthors());
-        // TODO: publication date
+        assertEquals(PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE_TAG).getValue());
+
         AdditionalFields additionalFields = entry.getAdditionalFields();
         List<Field> fields = additionalFields.getField();
         assertFieldsContainsAttribute(fields, SPECIES, speciesScientificName);

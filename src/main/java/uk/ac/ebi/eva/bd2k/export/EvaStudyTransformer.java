@@ -18,8 +18,11 @@ package uk.ac.ebi.eva.bd2k.export;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
+import uk.ac.ebi.ddi.xml.validator.parser.model.Date;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
 
+import uk.ac.ebi.eva.bd2k.client.ProjectClient;
+import uk.ac.ebi.eva.bd2k.model.EnaProject;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.time.LocalDate;
@@ -40,6 +43,15 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     public static final String TECHNOLOGY_TYPE = "technology_type";
 
+    public static final String PUBLICATION_DATE_TAG = "publication";
+
+    private final ProjectClient enaProjectClient;
+
+    public EvaStudyTransformer(
+            ProjectClient projectClient) {
+        this.enaProjectClient = projectClient;
+    }
+
     @Override
     protected Entry transformStudy(VariantStudy variantStudy) {
         logger.info("Transforming study {} ...", variantStudy.getId());
@@ -54,6 +66,9 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getExperimentType());
+
+        EnaProject project = enaProjectClient.getProject(variantStudy.getId());
+        entry.addDate(new Date(PUBLICATION_DATE_TAG, project.getPublicationDate()));
 
         return entry;
     }

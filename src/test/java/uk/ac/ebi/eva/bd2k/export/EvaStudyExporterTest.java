@@ -19,10 +19,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.mockito.Mock;
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
+import uk.ac.ebi.eva.bd2k.client.ProjectClient;
+import uk.ac.ebi.eva.bd2k.model.EnaProject;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.io.OutputStream;
@@ -39,8 +40,9 @@ import static org.mockito.Mockito.verify;
 
 public class EvaStudyExporterTest {
 
-    @Mock
     private OmicsDataMarshaller marshaller;
+
+    private ProjectClient enaProjectClientMock;
 
     private static final String STUDY_1_ID = "s1";
 
@@ -61,11 +63,13 @@ public class EvaStudyExporterTest {
                                   new URI("www.study2.org"), "Illumina", "Case-Control");
 
         marshaller = mock(OmicsDataMarshaller.class);
+
+        enaProjectClientMock = sudyId -> new EnaProject(sudyId, "2017-01-01");
     }
 
     @Test
     public void export() throws Exception {
-        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(), marshaller);
+        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(enaProjectClientMock), marshaller);
         System.out.println("temporaryFolder = " + temporaryFolder.getRoot().toString());
         Path outputDirectory = temporaryFolder.getRoot().toPath();
         exporter.export(Arrays.asList(study1, study2), outputDirectory);
