@@ -1,7 +1,7 @@
 package uk.ac.ebi.eva.bd2k.client;
 
-import uk.ac.ebi.ena.sra.xml.ProjectType;
+import uk.ac.ebi.eva.bd2k.model.EnaProject;
 
 public interface ProjectClient {
-    ProjectType getProject(String projectId);
+    EnaProject getProject(String projectId);
 }

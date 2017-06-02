@@ -2,8 +2,12 @@ package uk.ac.ebi.eva.bd2k.client;
 
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ena.sra.xml.AttributeType;
 import uk.ac.ebi.ena.sra.xml.ProjectType;
 
+import uk.ac.ebi.eva.bd2k.model.EnaProject;
+
+import java.util.Arrays;
 import java.util.Collections;
 
 public class ProjectEnaWSClient implements ProjectClient {
@@ -11,6 +15,8 @@ public class ProjectEnaWSClient implements ProjectClient {
     private final String projectServiceUrl;
 
     private final RestTemplate restTemplate;
+
+    private ProjectType enaProjectType;
 
     public ProjectEnaWSClient(String projectServiceUrl, RestTemplate restTemplate) {
         this.projectServiceUrl = projectServiceUrl;
@@ -20,8 +26,18 @@ public class ProjectEnaWSClient implements ProjectClient {
     }
 
     @Override
-    public ProjectType getProject(String projectId) {
-        ProjectType project = restTemplate.getForObject(projectServiceUrl, ProjectType.class, projectId);
-        return project;
+    public EnaProject getProject(String projectId) {
+        enaProjectType = restTemplate.getForObject(projectServiceUrl, ProjectType.class, projectId);
+        return new EnaProject(projectId, getPublicationDate(enaProjectType));
+    }
+
+    private String getPublicationDate(ProjectType project) {
+        AttributeType[] attributes = project.getPROJECTATTRIBUTES().getPROJECTATTRIBUTEArray();
+        return Arrays.stream(attributes).filter(a -> a.getTAG().equals("ENA-FIRST-PUBLIC"))
+                     .map(AttributeType::getVALUE).findFirst().get();
+    }
+
+    public ProjectType getEnaProjectType() {
+        return enaProjectType;
     }
 }

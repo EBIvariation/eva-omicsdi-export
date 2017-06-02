@@ -12,6 +12,8 @@ import uk.ac.ebi.ena.sra.xml.PublicationType;
 import uk.ac.ebi.ena.sra.xml.URLType;
 import uk.ac.ebi.ena.sra.xml.XRefType;
 
+import uk.ac.ebi.eva.bd2k.model.EnaProject;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -46,9 +48,10 @@ public class ProjectEnaWSClientTest {
     }
 
     @Test
-    public void getProject() throws Exception {
-        ProjectClient evaStudyWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
-        ProjectType project = evaStudyWSClient.getProject(PROJECT_ID);
+    public void getProjectType() throws Exception {
+        ProjectEnaWSClient enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
+        enaProjectWSClient.getProject(PROJECT_ID);
+        ProjectType project = enaProjectWSClient.getEnaProjectType();
 
         assertEquals("PRJEB6042", project.getAccession());
         assertEquals(
@@ -90,5 +93,14 @@ public class ProjectEnaWSClientTest {
         XRefType xreflink = publicationlinks.getPUBLICATIONLINKArray(0).getXREFLINK();
         assertEquals("PMID", xreflink.getDB());
         assertEquals("24037378", xreflink.getID());
+    }
+
+    @Test
+    public void getProject() throws Exception {
+        ProjectEnaWSClient enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
+        EnaProject project = enaProjectWSClient.getProject(PROJECT_ID);
+
+        assertEquals(PROJECT_ID, project.getId());
+        assertEquals("2014-04-04", project.getPublicationDate());
     }
 }
