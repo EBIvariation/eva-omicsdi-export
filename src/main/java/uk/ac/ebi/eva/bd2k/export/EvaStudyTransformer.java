@@ -45,11 +45,16 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     public static final String PUBLICATION_DATE_TAG = "publication";
 
+    public static final String EVA_FIRST_PUBLISHED_DATE = "2014-10-20";
+
     private final ProjectClient enaProjectClient;
+
+    private final LocalDate evaFirstPublishedDate;
 
     public EvaStudyTransformer(
             ProjectClient projectClient) {
         this.enaProjectClient = projectClient;
+        this.evaFirstPublishedDate = LocalDate.parse(EVA_FIRST_PUBLISHED_DATE);
     }
 
     @Override
@@ -62,13 +67,12 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.setDescription(variantStudy.getDescription());
         entry.setAuthors(variantStudy.getCenter());
 
+        entry.addDate(new Date(PUBLICATION_DATE_TAG, getPublicationDate(variantStudy)));
+
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getExperimentType());
-
-        EnaProject project = enaProjectClient.getProject(variantStudy.getId());
-        entry.addDate(new Date(PUBLICATION_DATE_TAG, project.getPublicationDate()));
 
         return entry;
     }
@@ -84,5 +88,17 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         database.setEntryCount(1);
 
         return database;
+    }
+
+    private String getPublicationDate(VariantStudy variantStudy) {
+        EnaProject project = enaProjectClient.getProject(variantStudy.getId());
+        LocalDate projectDate = LocalDate.parse(project.getPublicationDate());
+
+        // if the project was published before the first release of EVA, we return the EVA first release date
+        if (projectDate.isBefore(evaFirstPublishedDate)) {
+            return EVA_FIRST_PUBLISHED_DATE;
+        } else {
+            return project.getPublicationDate();
+        }
     }
 }

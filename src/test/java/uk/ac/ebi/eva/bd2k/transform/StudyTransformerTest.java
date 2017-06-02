@@ -33,6 +33,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.INSTRUMENT_PLATFORM;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE_TAG;
@@ -43,25 +44,52 @@ public class StudyTransformerTest {
 
     public static final String PUBLICATION_DATE = "2017-01-01";
 
+    public static final String PRE_EVA_PUBLICATION_DATE = "2014-01-01";
+
     private ProjectClient projectClientMock;
+
+    private ProjectClient preEvaProjectClientMock;
+
+    private VariantStudy variantStudy;
+
+    private String studyId;
+
+    private String studyName;
+
+    private String studyDescription;
+
+    private String center;
+
+    private String speciesScientificName;
+
+    private String type;
+
+    private String platform;
+
+    private URI projectUrl;
 
     @Before
     public void setUp() throws Exception {
         projectClientMock = projectId -> new EnaProject(projectId, PUBLICATION_DATE);
+        preEvaProjectClientMock = projectId -> new EnaProject(projectId, PRE_EVA_PUBLICATION_DATE);
+
+        // Variant Study fields
+        studyId = "S1";
+        studyName = "Study 1";
+        studyDescription = "This is the study 1";
+        center = "EBI";
+        speciesScientificName = "Homo sapiens";
+        projectUrl = new URI("http://www.study1.org");
+        platform = "Illumina";
+        type = "Case-Control";
+
+        variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl,
+                                        platform,
+                                        type);
     }
 
     @Test
     public void transform() throws Exception {
-        String studyName = "Study 1";
-        String studyId = "S1";
-        String studyDescription = "This is the study 1";
-        String speciesScientificName = "Homo sapiens";
-        String center = "EBI";
-        String type = "Case-Control";
-        String platform = "Illumina";
-        URI projectUrl = new URI("http://www.study1.org");
-        VariantStudy variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl, platform, type);
-
         EvaStudyTransformer studyTransformer = new EvaStudyTransformer(projectClientMock);
 
         Database database = studyTransformer.transform(variantStudy);
@@ -85,6 +113,16 @@ public class StudyTransformerTest {
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, platform);
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, type);
         // TODO: publications
+    }
+
+    @Test
+    public void transformProjectWithOldPublicationDate() throws Exception {
+        EvaStudyTransformer studyTransformer = new EvaStudyTransformer(preEvaProjectClientMock);
+
+        Database database = studyTransformer.transform(variantStudy);
+        Entry entry = database.getEntries().getEntry().get(0);
+
+        assertEquals(EVA_FIRST_PUBLISHED_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE_TAG).getValue());
     }
 
     private void assertFieldsContainsAttribute(List<Field> fields, String name, final String value) {
