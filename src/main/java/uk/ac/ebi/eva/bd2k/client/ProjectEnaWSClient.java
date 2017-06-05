@@ -25,6 +25,9 @@ import uk.ac.ebi.eva.bd2k.model.EnaProject;
 import java.util.Arrays;
 import java.util.Collections;
 
+/**
+ * Client to retrieve a project information from ENA Webservices
+ */
 public class ProjectEnaWSClient implements ProjectClient {
 
     private final String projectServiceUrl;
