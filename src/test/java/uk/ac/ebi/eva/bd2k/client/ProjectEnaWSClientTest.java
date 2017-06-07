@@ -49,6 +49,8 @@ public class ProjectEnaWSClientTest {
 
     private static final String PROJECT_ID = "PRJEB6042";
 
+    private ProjectEnaWSClient enaProjectWSClient;
+
     @Before
     public void setUp() throws Exception {
         String xmlTestFileBody = Files.readAllLines(
@@ -60,11 +62,12 @@ public class ProjectEnaWSClientTest {
 
         server.expect(requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID))).andExpect(method(HttpMethod.GET))
               .andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
+        enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
+
     }
 
     @Test
     public void getProjectType() throws Exception {
-        ProjectEnaWSClient enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
         enaProjectWSClient.getProject(PROJECT_ID);
         ProjectType project = enaProjectWSClient.getEnaProjectType();
 
@@ -112,7 +115,6 @@ public class ProjectEnaWSClientTest {
 
     @Test
     public void getProject() throws Exception {
-        ProjectEnaWSClient enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
         EnaProject project = enaProjectWSClient.getProject(PROJECT_ID);
 
         assertEquals(PROJECT_ID, project.getId());
