@@ -64,7 +64,7 @@ public class EvaStudyExporterTest {
 
         marshaller = mock(OmicsDataMarshaller.class);
 
-        enaProjectClientMock = sudyId -> new EnaProject(sudyId, "2017-01-01");
+        enaProjectClientMock = studyId -> new EnaProject(studyId, "2017-01-01");
     }
 
     @Test

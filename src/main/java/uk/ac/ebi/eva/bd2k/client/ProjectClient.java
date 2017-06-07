@@ -20,6 +20,7 @@ import uk.ac.ebi.eva.bd2k.model.EnaProject;
 /**
  * Interface that represents a client that retrieves a ENA project information from a service
  */
+@FunctionalInterface
 public interface ProjectClient {
     EnaProject getProject(String projectId);
 }
