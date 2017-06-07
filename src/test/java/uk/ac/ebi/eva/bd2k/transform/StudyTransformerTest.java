@@ -84,8 +84,7 @@ public class StudyTransformerTest {
         type = "Case-Control";
 
         variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl,
-                                        platform,
-                                        type);
+                                        platform, type);
     }
 
     @Test
