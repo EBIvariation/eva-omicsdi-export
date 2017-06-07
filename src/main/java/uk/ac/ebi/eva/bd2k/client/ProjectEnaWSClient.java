@@ -23,6 +23,7 @@ import uk.ac.ebi.eva.bd2k.model.EnaProject;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.TimeZone;
 
 /**
  * Client to retrieve a project information from ENA Webservices
@@ -43,6 +44,7 @@ public class ProjectEnaWSClient implements ProjectClient {
         HttpMessageConverter<ProjectType> messageConverter = new ProjectHttpMessageConverter();
         this.restTemplate.setMessageConverters(Collections.singletonList(messageConverter));
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Europe/London"));
     }
 
     @Override
