@@ -53,7 +53,7 @@ public class ProjectEnaWSClientTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         String xmlTestFileBody = Files.readAllLines(
-                Paths.get(ProjectEnaWSClientTest.class.getResource("/projectWSResponse.xml").toURI())).stream()
+                Paths.get(ProjectEnaWSClientTest.class.getResource("/project-ws-response.xml").toURI())).stream()
                                       .reduce((s, s2) -> s + s2).get();
         RestTemplate restTemplate = new RestTemplate();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
