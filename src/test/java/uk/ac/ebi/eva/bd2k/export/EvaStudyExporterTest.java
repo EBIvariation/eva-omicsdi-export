@@ -40,13 +40,13 @@ import static org.mockito.Mockito.verify;
 
 public class EvaStudyExporterTest {
 
-    private OmicsDataMarshaller marshaller;
-
-    private ProjectClient enaProjectClientMock;
-
     private static final String STUDY_1_ID = "s1";
 
     private static final String STUDY_2_ID = "s2";
+
+    private OmicsDataMarshaller marshaller;
+
+    private ProjectClient enaProjectClientMock;
 
     private VariantStudy study1;
 
