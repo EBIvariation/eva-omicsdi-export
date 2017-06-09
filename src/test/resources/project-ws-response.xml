@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT request="PRJEB6042&amp;display=xml">
+    <PROJECT alias="Geuvadis" broker_name="EBI" center_name="CENTER FOR GENOMIC REGULATION - CRG (BARCELONA), INSTITUTE OF HUMAN GENETICS - HELMHOLTZ ZENTRUM (MUNICH)" accession="PRJEB6042" first_public="2014-04-04+01:00" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <IDENTIFIERS>
+            <PRIMARY_ID>PRJEB6042</PRIMARY_ID>
+            <SECONDARY_ID>ERP005504</SECONDARY_ID>
+            <SUBMITTER_ID namespace="Center for Genomic Regulation - CRG (Barcelona), Institute of Human Genetics - Helmholtz Zentrum (Munich)">Geuvadis</SUBMITTER_ID>
+        </IDENTIFIERS>
+        <TITLE>GEUVADIS: Genetic European Variation in Disease</TITLE>
+        <DESCRIPTION>GEUVADIS: Genetic European Variation in Disease (http://www.geuvadis.org), is a European Medical Sequencing Consortium aiming at sharing capacity across Europe in high-throughput sequencing technology to explore genetic variation in health and disease. It is funded by the European Commission 7th framework program under the Coordination and Support Action scheme. It started on the 1st October 2010, and ends on 31st December 2013. The project Coordinator is Xavier Estivill from Center for Genomic Regulation, Barcelona.</DESCRIPTION>
+        <PUBLICATIONS>
+            <PUBLICATION>
+                <PUBLICATION_LINKS>
+                    <PUBLICATION_LINK>
+                        <XREF_LINK>
+                            <DB>PMID</DB>
+                            <ID>24037378</ID>
+                        </XREF_LINK>
+                    </PUBLICATION_LINK>
+                </PUBLICATION_LINKS>
+            </PUBLICATION>
+        </PUBLICATIONS>
+        <COLLABORATORS>
+            <COLLABORATOR>Center for Genomic Regulation</COLLABORATOR>
+            <COLLABORATOR>Spain; University of Geneva</COLLABORATOR>
+            <COLLABORATOR>Switzerland; Helmholtz Centre Munich</COLLABORATOR>
+            <COLLABORATOR>Germany; Wellcome Trust Sanger Institute</COLLABORATOR>
+            <COLLABORATOR>UK; National Genomic Research Centre</COLLABORATOR>
+            <COLLABORATOR>France; Max Plank Gesellschaft</COLLABORATOR>
+            <COLLABORATOR>Germany; Barcelona Scientific Parc</COLLABORATOR>
+            <COLLABORATOR>Spain; University of Uppsala</COLLABORATOR>
+            <COLLABORATOR>Sweden; Christian Albrechts University of Kiel</COLLABORATOR>
+            <COLLABORATOR>Germany; Stichting Catholic University</COLLABORATOR>
+            <COLLABORATOR>Netherlands; Leiden University Medical Center</COLLABORATOR>
+            <COLLABORATOR>Netherlands; University of Santiago de Compostela</COLLABORATOR>
+            <COLLABORATOR>Spain; European Bioinformatics Institute</COLLABORATOR>
+            <COLLABORATOR>United Kingdom; National Institute for Health and Medical Research</COLLABORATOR>
+            <COLLABORATOR>France; Applied Biosystems</COLLABORATOR>
+            <COLLABORATOR>Germany; Illumina</COLLABORATOR>
+            <COLLABORATOR>UK; John Hopkins University</COLLABORATOR>
+            <COLLABORATOR>USA</COLLABORATOR>
+        </COLLABORATORS>
+        <SUBMISSION_PROJECT>
+            <SEQUENCING_PROJECT/>
+            <ORGANISM>
+                <TAXON_ID>9606</TAXON_ID>
+                <SCIENTIFIC_NAME>Homo sapiens</SCIENTIFIC_NAME>
+                <COMMON_NAME>human</COMMON_NAME>
+            </ORGANISM>
+        </SUBMISSION_PROJECT>
+        <PROJECT_LINKS>
+            <PROJECT_LINK>
+                <URL_LINK>
+                    <LABEL>PRJEB3366</LABEL>
+                    <URL>http://www.ebi.ac.uk/ena/data/view/PRJEB3366</URL>
+                </URL_LINK>
+            </PROJECT_LINK>
+            <PROJECT_LINK>
+                <XREF_LINK>
+                    <DB>ENA-SUBMISSION</DB>
+                    <ID>ERA298142</ID>
+                </XREF_LINK>
+            </PROJECT_LINK>
+            <PROJECT_LINK>
+                <XREF_LINK>
+                    <DB>ENA-ANALYSIS</DB>
+                    <ID>ERZ019882</ID>
+                </XREF_LINK>
+            </PROJECT_LINK>
+            <PROJECT_LINK>
+                <XREF_LINK>
+                    <DB>ENA-FASTQ-FILES</DB>
+                    <ID><![CDATA[http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=PRJEB6042&result=read_run&fields=run_accession,fastq_ftp,fastq_md5,fastq_bytes]]></ID>
+                </XREF_LINK>
+            </PROJECT_LINK>
+            <PROJECT_LINK>
+                <XREF_LINK>
+                    <DB>ENA-SUBMITTED-FILES</DB>
+                    <ID><![CDATA[http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=PRJEB6042&result=read_run&fields=run_accession,submitted_ftp,submitted_md5,submitted_bytes,submitted_format]]></ID>
+                </XREF_LINK>
+            </PROJECT_LINK>
+        </PROJECT_LINKS>
+        <PROJECT_ATTRIBUTES>
+            <PROJECT_ATTRIBUTE>
+                <TAG>ENA-FIRST-PUBLIC</TAG>
+                <VALUE>2014-04-04</VALUE>
+            </PROJECT_ATTRIBUTE>
+            <PROJECT_ATTRIBUTE>
+                <TAG>ENA-LAST-UPDATE</TAG>
+                <VALUE>2016-05-20</VALUE>
+            </PROJECT_ATTRIBUTE>
+        </PROJECT_ATTRIBUTES>
+    </PROJECT>
+</ROOT>

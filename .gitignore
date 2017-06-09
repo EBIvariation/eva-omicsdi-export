@@ -17,3 +17,6 @@ hs_err_pid*
 
 # Maven output
 target
+
+# OS-X
+.DS_Store

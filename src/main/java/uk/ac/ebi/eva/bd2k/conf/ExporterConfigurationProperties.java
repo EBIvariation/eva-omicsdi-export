@@ -24,6 +24,8 @@ public class ExporterConfigurationProperties {
 
     private String evaStudiesUrl;
 
+    private String enaProjectUrl;
+
     private String outputDirectory;
 
     public String getEvaStudiesUrl() {
@@ -40,5 +42,13 @@ public class ExporterConfigurationProperties {
 
     public void setOutputDirectory(String outputDirectory) {
         this.outputDirectory = outputDirectory;
+    }
+
+    public String getEnaProjectUrl() {
+        return enaProjectUrl;
+    }
+
+    public void setEnaProjectUrl(String enaProjectUrl) {
+        this.enaProjectUrl = enaProjectUrl;
     }
 }
