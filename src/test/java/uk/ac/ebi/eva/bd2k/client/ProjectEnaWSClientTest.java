@@ -15,10 +15,11 @@
  */
 package uk.ac.ebi.eva.bd2k.client;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 import uk.ac.ebi.ena.sra.xml.AttributeType;
@@ -43,27 +44,24 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 public class ProjectEnaWSClientTest {
 
-    private RestTemplate restTemplate;
-
     private static final String PROJECT_WS_URL = "MOCKSERVER/ena/data/view/{projectId}&display=xml";
 
     private static final String PROJECT_ID = "PRJEB6042";
 
-    private ProjectEnaWSClient enaProjectWSClient;
+    private static ProjectEnaWSClient enaProjectWSClient;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUpClass() throws Exception {
         String xmlTestFileBody = Files.readAllLines(
-                Paths.get(this.getClass().getResource("/projectWSResponse.xml").toURI())).stream()
-                           .reduce((s, s2) -> s + s2).get();
-
-        restTemplate = new RestTemplate();
+                Paths.get(ProjectEnaWSClientTest.class.getResource("/projectWSResponse.xml").toURI())).stream()
+                                      .reduce((s, s2) -> s + s2).get();
+        RestTemplate restTemplate = new RestTemplate();
         MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
 
-        server.expect(requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID))).andExpect(method(HttpMethod.GET))
-              .andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
-        enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
+        server.expect(ExpectedCount.times(2), requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID)))
+              .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
 
+        enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
     }
 
     @Test
