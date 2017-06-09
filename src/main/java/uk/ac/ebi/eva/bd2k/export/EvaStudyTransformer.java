@@ -43,7 +43,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     public static final String TECHNOLOGY_TYPE = "technology_type";
 
-    public static final String PUBLICATION_DATE_TAG = "publication";
+    public static final String PUBLICATION_DATE = "publication";
 
     public static final String EVA_FIRST_PUBLISHED_DATE = "2014-10-20";
 
@@ -67,7 +67,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.setDescription(variantStudy.getDescription());
         entry.setAuthors(variantStudy.getCenter());
 
-        entry.addDate(new Date(PUBLICATION_DATE_TAG, getPublicationDate(variantStudy)));
+        entry.addDate(new Date(PUBLICATION_DATE, getPublicationDate(variantStudy)));
 
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());

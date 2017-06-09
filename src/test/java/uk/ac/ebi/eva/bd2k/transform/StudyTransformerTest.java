@@ -36,15 +36,15 @@ import static org.junit.Assert.assertTrue;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.INSTRUMENT_PLATFORM;
-import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE_TAG;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
 
 public class StudyTransformerTest {
 
-    public static final String PUBLICATION_DATE = "2017-01-01";
+    public static final String EVA_STUDY_PUBLICATION_DATE = "2017-01-01";
 
-    public static final String PRE_EVA_PUBLICATION_DATE = "2014-01-01";
+    public static final String PRE_EVA_STUDY_PUBLICATION_DATE = "2014-01-01";
 
     private ProjectClient projectClientMock;
 
@@ -70,8 +70,8 @@ public class StudyTransformerTest {
 
     @Before
     public void setUp() throws Exception {
-        projectClientMock = projectId -> new EnaProject(projectId, PUBLICATION_DATE);
-        preEvaProjectClientMock = projectId -> new EnaProject(projectId, PRE_EVA_PUBLICATION_DATE);
+        projectClientMock = projectId -> new EnaProject(projectId, EVA_STUDY_PUBLICATION_DATE);
+        preEvaProjectClientMock = projectId -> new EnaProject(projectId, PRE_EVA_STUDY_PUBLICATION_DATE);
 
         // Variant Study fields
         studyId = "S1";
@@ -103,7 +103,7 @@ public class StudyTransformerTest {
         assertEquals(studyName, entry.getName().getValue());
         assertEquals(studyDescription, entry.getDescription());
         assertEquals(center, entry.getAuthors());
-        assertEquals(PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE_TAG).getValue());
+        assertEquals(EVA_STUDY_PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE).getValue());
 
         AdditionalFields additionalFields = entry.getAdditionalFields();
         List<Field> fields = additionalFields.getField();
@@ -121,7 +121,7 @@ public class StudyTransformerTest {
         Database database = studyTransformer.transform(variantStudy);
         Entry entry = database.getEntries().getEntry().get(0);
 
-        assertEquals(EVA_FIRST_PUBLISHED_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE_TAG).getValue());
+        assertEquals(EVA_FIRST_PUBLISHED_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE).getValue());
     }
 
     private void assertFieldsContainsAttribute(List<Field> fields, String name, final String value) {
