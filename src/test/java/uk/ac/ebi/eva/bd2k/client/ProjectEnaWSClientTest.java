@@ -71,11 +71,19 @@ public class ProjectEnaWSClientTest {
 
         assertEquals("PRJEB6042", project.getAccession());
         assertEquals(
-                "CENTER FOR GENOMIC REGULATION - CRG (BARCELONA), INSTITUTE OF HUMAN GENETICS - HELMHOLTZ ZENTRUM (MUNICH)",
+                "CENTER FOR GENOMIC REGULATION - CRG (BARCELONA), INSTITUTE OF HUMAN GENETICS - HELMHOLTZ ZENTRUM " +
+                        "(MUNICH)",
                 project.getCenterName());
         assertEquals("Geuvadis", project.getAlias());
         assertEquals("GEUVADIS: Genetic European Variation in Disease", project.getTITLE());
-        assertEquals("GEUVADIS: Genetic European Variation in Disease (http://www.geuvadis.org), is a European Medical Sequencing Consortium aiming at sharing capacity across Europe in high-throughput sequencing technology" + " to explore genetic variation in health and disease. It is funded by the European Commission 7th framework program under the Coordination and Support Action scheme. It started on the 1st October 2010, and ends on 31st December 2013. The project Coordinator is Xavier Estivill from Center for Genomic Regulation, Barcelona.", project.getDESCRIPTION());
+        assertEquals(
+                "GEUVADIS: Genetic European Variation in Disease (http://www.geuvadis.org), is a European Medical " +
+                        "Sequencing Consortium aiming at sharing capacity across Europe in high-throughput sequencing" +
+                        " technology" + " to explore genetic variation in health and disease. It is funded by the " +
+                        "European Commission 7th framework program under the Coordination and Support Action scheme. " +
+                        "It started on the 1st October 2010, and ends on 31st December 2013. The project Coordinator " +
+                        "is Xavier Estivill from Center for Genomic Regulation, Barcelona.",
+                project.getDESCRIPTION());
 
         // dates
         AttributeType[] attributes = project.getPROJECTATTRIBUTES().getPROJECTATTRIBUTEArray();
@@ -90,16 +98,26 @@ public class ProjectEnaWSClientTest {
                                          .map(link -> link.getXREFLINK()).collect(Collectors.toList());
         assertTrue(xRefLinks.stream().anyMatch(
                 xRef -> xRef.getDB().equals("ENA-SUBMISSION") && xRef.getID().equals("ERA298142")));
-        assertTrue(xRefLinks.stream()
-                            .anyMatch(xRef -> xRef.getDB().equals("ENA-ANALYSIS") && xRef.getID().equals("ERZ019882")));
-        assertTrue(xRefLinks.stream()
-                            .anyMatch(xRef -> xRef.getDB().equals("ENA-FASTQ-FILES") && xRef.getID().equals("http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=PRJEB6042&result=read_run&fields=run_accession,fastq_ftp,fastq_md5,fastq_bytes")));
-        assertTrue(xRefLinks.stream()
-                            .anyMatch(xRef -> xRef.getDB().equals("ENA-SUBMITTED-FILES") && xRef.getID().equals("http://www.ebi.ac.uk/ena/data/warehouse/filereport?accession=PRJEB6042&result=read_run&fields=run_accession,submitted_ftp,submitted_md5,submitted_bytes,submitted_format")));
+        assertTrue(xRefLinks.stream().anyMatch(
+                xRef -> xRef.getDB().equals("ENA-ANALYSIS") && xRef.getID().equals("ERZ019882")));
+
+        String enaFastqFilesXRef = "http://www.ebi.ac" +
+                ".uk/ena/data/warehouse/filereport?accession=PRJEB6042&result=read_run&fields=run_accession," +
+                "fastq_ftp,fastq_md5,fastq_bytes";
+        assertTrue(xRefLinks.stream().anyMatch(
+                xRef -> xRef.getDB().equals("ENA-FASTQ-FILES") && xRef.getID().equals(enaFastqFilesXRef)));
+
+        String enaSubmittedFilesXRef = "http://www.ebi.ac" +
+                ".uk/ena/data/warehouse/filereport?accession=PRJEB6042&result=read_run&fields=run_accession," +
+                "submitted_ftp,submitted_md5,submitted_bytes,submitted_format";
+        assertTrue(xRefLinks.stream().anyMatch(
+                xRef -> xRef.getDB().equals("ENA-SUBMITTED-FILES") && xRef.getID().equals(enaSubmittedFilesXRef)));
+
         List<URLType> urlLinks = Arrays.stream(projectlinks).filter(link -> link.isSetURLLINK())
                                        .map(link -> link.getURLLINK()).collect(Collectors.toList());
-        assertTrue(urlLinks.stream().anyMatch(url -> url.getLABEL().equals("PRJEB3366") && url.getURL()
-                                                                                              .equals("http://www.ebi.ac.uk/ena/data/view/PRJEB3366")));
+        String projectUrl = "http://www.ebi.ac.uk/ena/data/view/PRJEB3366";
+        assertTrue(urlLinks.stream().anyMatch(
+                url -> url.getLABEL().equals("PRJEB3366") && url.getURL().equals(projectUrl)));
 
         // publications
         ProjectType.PUBLICATIONS publications = project.getPUBLICATIONS();
