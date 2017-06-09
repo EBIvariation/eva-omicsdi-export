@@ -32,9 +32,10 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * HttpMessageConverter that extract a ENA ProjctType object from a XML document
+ * HttpMessageConverter that extracts a ENA ProjectType object from a XML document
  */
 public class ProjectHttpMessageConverter implements HttpMessageConverter<ProjectType> {
+
     @Override
     public boolean canRead(Class<?> aClass, MediaType mediaType) {
         return true;
