@@ -52,39 +52,13 @@ public class StudyTransformerTest {
 
     private VariantStudy variantStudy;
 
-    private String studyId;
-
-    private String studyName;
-
-    private String studyDescription;
-
-    private String center;
-
-    private String speciesScientificName;
-
-    private String type;
-
-    private String platform;
-
-    private URI projectUrl;
-
     @Before
     public void setUp() throws Exception {
         projectClientMock = projectId -> new EnaProject(projectId, EVA_STUDY_PUBLICATION_DATE);
         preEvaProjectClientMock = projectId -> new EnaProject(projectId, PRE_EVA_STUDY_PUBLICATION_DATE);
 
-        // Variant Study fields
-        studyId = "S1";
-        studyName = "Study 1";
-        studyDescription = "This is the study 1";
-        center = "EBI";
-        speciesScientificName = "Homo sapiens";
-        projectUrl = new URI("http://www.study1.org");
-        platform = "Illumina";
-        type = "Case-Control";
-
-        variantStudy = new VariantStudy(studyId, studyName, studyDescription, center, speciesScientificName, projectUrl,
-                                        platform, type);
+        variantStudy = new VariantStudy("S1", "Study 1", "This is the study 1", "EBI", "Homo sapiens",
+                                        new URI("http://www.study1.org"), "Illumina", "Case-Control");
     }
 
     @Test
@@ -99,23 +73,23 @@ public class StudyTransformerTest {
         assertEquals(1, database.getEntryCount().intValue());
 
         Entry entry = database.getEntries().getEntry().get(0);
-        assertEquals(studyId, entry.getId());
-        assertEquals(studyName, entry.getName().getValue());
-        assertEquals(studyDescription, entry.getDescription());
-        assertEquals(center, entry.getAuthors());
+        assertEquals(variantStudy.getId(), entry.getId());
+        assertEquals(variantStudy.getName(), entry.getName().getValue());
+        assertEquals(variantStudy.getDescription(), entry.getDescription());
+        assertEquals(variantStudy.getCenter(), entry.getAuthors());
         assertEquals(EVA_STUDY_PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE).getValue());
 
         AdditionalFields additionalFields = entry.getAdditionalFields();
         List<Field> fields = additionalFields.getField();
-        assertFieldsContainsAttribute(fields, SPECIES, speciesScientificName);
-        assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, projectUrl.toString());
-        assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, platform);
-        assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, type);
+        assertFieldsContainsAttribute(fields, SPECIES, variantStudy.getSpeciesScientificName());
+        assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, variantStudy.getUrl().toString());
+        assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, variantStudy.getPlatform());
+        assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
         // TODO: publications
     }
 
     @Test
-    public void transformProjectWithOldPublicationDate() throws Exception {
+    public void testNoDatePreviousToEvaIsUsed() throws Exception {
         EvaStudyTransformer studyTransformer = new EvaStudyTransformer(preEvaProjectClientMock);
 
         Database database = studyTransformer.transform(variantStudy);
