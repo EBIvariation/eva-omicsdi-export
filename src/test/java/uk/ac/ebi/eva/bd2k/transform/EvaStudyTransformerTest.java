@@ -33,12 +33,16 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EUROPEAN_VARIATION_ARCHIVE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.GENOMICS;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.INSTRUMENT_PLATFORM;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.OMICS_TYPE;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.REPOSITORY;
 
 public class EvaStudyTransformerTest {
 
@@ -85,6 +89,8 @@ public class EvaStudyTransformerTest {
         assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, variantStudy.getUrl().toString());
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
+        assertFieldsContainsAttribute(fields, OMICS_TYPE, GENOMICS);
+        assertFieldsContainsAttribute(fields, REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
         // TODO: publications
     }
 

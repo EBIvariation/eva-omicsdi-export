@@ -35,15 +35,9 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     private static final Logger logger = LoggerFactory.getLogger(EvaStudyTransformer.class);
 
-    public static final String SPECIES = "species";
+    public static final String GENOMICS = "Genomics";
 
-    public static final String FULL_DATASET_LINK = "full_dataset_link";
-
-    public static final String INSTRUMENT_PLATFORM = "instrument_platform";
-
-    public static final String TECHNOLOGY_TYPE = "technology_type";
-
-    public static final String PUBLICATION_DATE = "publication";
+    public static final String EUROPEAN_VARIATION_ARCHIVE = "European Variation Archive";
 
     public static final String EVA_FIRST_PUBLISHED_DATE = "2014-10-20";
 
@@ -69,6 +63,8 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
         entry.addDate(new Date(PUBLICATION_DATE, getPublicationDate(variantStudy)));
 
+        entry.addAdditionalField(OMICS_TYPE, GENOMICS);
+        entry.addAdditionalField(REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());

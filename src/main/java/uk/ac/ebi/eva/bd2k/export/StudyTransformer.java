@@ -24,6 +24,21 @@ import uk.ac.ebi.ddi.xml.validator.parser.model.Entry;
  */
 public abstract class StudyTransformer<T> {
 
+
+    public static final String SPECIES = "species";
+
+    public static final String FULL_DATASET_LINK = "full_dataset_link";
+
+    public static final String INSTRUMENT_PLATFORM = "instrument_platform";
+
+    public static final String TECHNOLOGY_TYPE = "technology_type";
+
+    public static final String OMICS_TYPE = "omics_type";
+
+    public static final String REPOSITORY = "repository";
+
+    public static final String PUBLICATION_DATE = "publication";
+
     public Database transform (T study){
         Entry entry = transformStudy(study);
         Database database = buildSingleEntryDatabase(entry);
