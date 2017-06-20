@@ -40,7 +40,7 @@ import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
 
-public class StudyTransformerTest {
+public class EvaStudyTransformerTest {
 
     public static final String EVA_STUDY_PUBLICATION_DATE = "2017-01-01";
 
