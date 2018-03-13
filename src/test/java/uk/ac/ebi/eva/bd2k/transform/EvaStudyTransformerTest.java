@@ -43,6 +43,7 @@ import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
 import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.OMICS_TYPE;
 import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.REPOSITORY;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.SUBMITTER;
 
 public class EvaStudyTransformerTest {
 
@@ -80,7 +81,6 @@ public class EvaStudyTransformerTest {
         assertEquals(variantStudy.getId(), entry.getId());
         assertEquals(variantStudy.getName(), entry.getName().getValue());
         assertEquals(variantStudy.getDescription(), entry.getDescription());
-        assertEquals(variantStudy.getCenter(), entry.getAuthors());
         assertEquals(EVA_STUDY_PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE).getValue());
 
         AdditionalFields additionalFields = entry.getAdditionalFields();
@@ -91,6 +91,7 @@ public class EvaStudyTransformerTest {
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
         assertFieldsContainsAttribute(fields, OMICS_TYPE, GENOMICS);
         assertFieldsContainsAttribute(fields, REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
+        assertFieldsContainsAttribute(fields, SUBMITTER, variantStudy.getCenter());
         // TODO: publications
     }
 

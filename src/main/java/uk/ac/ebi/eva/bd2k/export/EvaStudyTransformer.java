@@ -59,7 +59,6 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.setId(variantStudy.getId());
         entry.setName(variantStudy.getName());
         entry.setDescription(variantStudy.getDescription());
-        entry.setAuthors(variantStudy.getCenter());
 
         entry.addDate(new Date(PUBLICATION_DATE, getPublicationDate(variantStudy)));
 
@@ -69,6 +68,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getExperimentType());
+        entry.addAdditionalField(SUBMITTER, variantStudy.getCenter());
 
         return entry;
     }
