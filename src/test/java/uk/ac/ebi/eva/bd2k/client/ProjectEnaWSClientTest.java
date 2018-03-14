@@ -15,6 +15,7 @@
  */
 package uk.ac.ebi.eva.bd2k.client;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.http.HttpMethod;
@@ -50,18 +51,25 @@ public class ProjectEnaWSClientTest {
 
     private static ProjectEnaWSClient enaProjectWSClient;
 
+    private static MockRestServiceServer server;
+
     @BeforeClass
     public static void setUpClass() throws Exception {
         String xmlTestFileBody = Files.readAllLines(
                 Paths.get(ProjectEnaWSClientTest.class.getResource("/project-ws-response.xml").toURI())).stream()
                                       .reduce((s, s2) -> s + s2).get();
         RestTemplate restTemplate = new RestTemplate();
-        MockRestServiceServer server = MockRestServiceServer.bindTo(restTemplate).build();
+        server = MockRestServiceServer.bindTo(restTemplate).build();
 
         server.expect(ExpectedCount.times(2), requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID)))
               .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
 
         enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
+    }
+
+    @AfterClass
+    public static void verifyServerCalls() throws Exception {
+        server.verify();
     }
 
     @Test
