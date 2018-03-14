@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import uk.ac.ebi.ddi.xml.validator.parser.marshaller.OmicsDataMarshaller;
 import uk.ac.ebi.ddi.xml.validator.parser.model.Database;
 
+import uk.ac.ebi.eva.bd2k.client.ProjectFirstPublicDateNotFoundException;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
@@ -59,6 +61,9 @@ public abstract class StudyExporter<T> {
             logger.info("Done");
         } catch (FileNotFoundException e) {
             logger.error("Cannot create output file: {}", e.getMessage());
+        } catch (ProjectFirstPublicDateNotFoundException e) {
+            logger.error(e.getMessage());
+            System.exit(1);
         }
     }
 

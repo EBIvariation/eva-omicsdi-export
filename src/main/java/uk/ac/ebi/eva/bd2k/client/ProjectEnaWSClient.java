@@ -22,11 +22,8 @@ import uk.ac.ebi.ena.sra.xml.ProjectType;
 
 import uk.ac.ebi.eva.bd2k.model.EnaProject;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.TimeZone;
 import java.util.stream.Stream;
 
 /**
@@ -62,7 +59,7 @@ public class ProjectEnaWSClient implements ProjectClient {
         if (enaFirstPublicDate.isPresent()) {
             return enaFirstPublicDate.get().getVALUE();
         } else {
-            throw new NoSuchElementException(
+            throw new ProjectFirstPublicDateNotFoundException(
                     ENA_FIRST_PUBLIC + " attribute not present in ENA Project " + projectId + " XML");
         }
     }
