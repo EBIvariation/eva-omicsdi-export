@@ -39,6 +39,9 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     public static final String EUROPEAN_VARIATION_ARCHIVE = "European Variation Archive";
 
+    public static final String DATABASE_DESCRIPTION = "The European Variation Archive is an open-access database of " +
+            "all types of genetic variation data from all species";
+
     public static final String EVA_FIRST_PUBLISHED_DATE = "2014-10-20";
 
     private final ProjectClient enaProjectClient;
@@ -57,6 +60,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         Entry entry = new Entry();
 
         entry.setId(variantStudy.getId());
+        entry.setAcc(variantStudy.getId());
         entry.setName(variantStudy.getName());
         entry.setDescription(variantStudy.getDescription());
 
@@ -77,7 +81,8 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
     protected Database buildSingleEntryDatabase(Entry entry) {
         Database database = new Database();
 
-        database.setName("EVA");
+        database.setName(EUROPEAN_VARIATION_ARCHIVE);
+        database.setDescription(DATABASE_DESCRIPTION);
         database.setRelease(LocalDate.now().toString());
         database.setReleaseDate(LocalDate.now().toString());
         database.setEntries(Collections.singletonList(entry));

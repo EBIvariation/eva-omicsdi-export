@@ -32,7 +32,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.DATABASE_DESCRIPTION;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EUROPEAN_VARIATION_ARCHIVE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
@@ -72,13 +74,15 @@ public class EvaStudyTransformerTest {
 
         Database database = studyTransformer.transform(variantStudy);
 
-        assertEquals("EVA", database.getName());
+        assertEquals(EUROPEAN_VARIATION_ARCHIVE, database.getName());
+        assertEquals(DATABASE_DESCRIPTION, database.getDescription());
         assertEquals(LocalDate.now().toString(), database.getRelease());
         assertEquals(LocalDate.now().toString(), database.getReleaseDate());
         assertEquals(1, database.getEntryCount().intValue());
 
         Entry entry = database.getEntries().getEntry().get(0);
         assertEquals(variantStudy.getId(), entry.getId());
+        assertEquals(variantStudy.getId(), entry.getAcc());
         assertEquals(variantStudy.getName(), entry.getName().getValue());
         assertEquals(variantStudy.getDescription(), entry.getDescription());
         assertEquals(EVA_STUDY_PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE).getValue());

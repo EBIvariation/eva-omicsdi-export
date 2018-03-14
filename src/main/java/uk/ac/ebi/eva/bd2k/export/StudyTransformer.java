@@ -31,7 +31,7 @@ public abstract class StudyTransformer<T> {
 
     public static final String INSTRUMENT_PLATFORM = "instrument_platform";
 
-    public static final String TECHNOLOGY_TYPE = "technology_type";
+    public static final String TECHNOLOGY_TYPE = "dataset_type";
 
     public static final String OMICS_TYPE = "omics_type";
 
