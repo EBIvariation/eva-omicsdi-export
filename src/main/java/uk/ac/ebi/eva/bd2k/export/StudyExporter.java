@@ -60,10 +60,7 @@ public abstract class StudyExporter<T> {
             }
             logger.info("Done");
         } catch (FileNotFoundException e) {
-            logger.error("Cannot create output file: {}", e.getMessage());
-        } catch (ProjectFirstPublicDateNotFoundException e) {
-            logger.error(e.getMessage());
-            System.exit(1);
+            throw new OutputFileNotExistingException("Cannot create output file: " + e.getMessage());
         }
     }
 
