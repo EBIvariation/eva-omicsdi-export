@@ -17,18 +17,21 @@ package uk.ac.ebi.eva.bd2k.client;
 
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import uk.ac.ebi.ena.sra.xml.AttributeType;
 import uk.ac.ebi.ena.sra.xml.ProjectType;
 
 import uk.ac.ebi.eva.bd2k.model.EnaProject;
 
-import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.TimeZone;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Client to retrieve a project information from ENA Webservices
  */
 public class ProjectEnaWSClient implements ProjectClient {
+
+    private static final String ENA_FIRST_PUBLIC = "ENA-FIRST-PUBLIC";
 
     private final String projectServiceUrl;
 
@@ -36,25 +39,29 @@ public class ProjectEnaWSClient implements ProjectClient {
 
     private ProjectType enaProjectType;
 
-    private SimpleDateFormat simpleDateFormat;
-
     public ProjectEnaWSClient(String projectServiceUrl, RestTemplate restTemplate) {
         this.projectServiceUrl = projectServiceUrl;
         this.restTemplate = restTemplate;
         HttpMessageConverter<ProjectType> messageConverter = new ProjectHttpMessageConverter();
         this.restTemplate.setMessageConverters(Collections.singletonList(messageConverter));
-        simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Europe/London"));
     }
 
     @Override
     public EnaProject getProject(String projectId) {
         enaProjectType = restTemplate.getForObject(projectServiceUrl, ProjectType.class, projectId);
-        return new EnaProject(projectId, getPublicationDate(enaProjectType));
+        return new EnaProject(projectId, getPublicationDate(enaProjectType, projectId));
     }
 
-    private String getPublicationDate(ProjectType project) {
-        return simpleDateFormat.format(project.getFirstPublic().getTime());
+    private String getPublicationDate(ProjectType project, String projectId) {
+        Optional<AttributeType> enaFirstPublicDate =
+                Stream.of(project.getPROJECTATTRIBUTES().getPROJECTATTRIBUTEArray()).
+                        filter(a -> a.getTAG().equals(ENA_FIRST_PUBLIC)).findFirst();
+        if (enaFirstPublicDate.isPresent()) {
+            return enaFirstPublicDate.get().getVALUE();
+        } else {
+            throw new ProjectFirstPublicDateNotFoundException(
+                    ENA_FIRST_PUBLIC + " attribute not present in ENA Project " + projectId + " XML");
+        }
     }
 
     public ProjectType getEnaProjectType() {

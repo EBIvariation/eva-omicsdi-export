@@ -47,19 +47,17 @@ public abstract class StudyExporter<T> {
         outputFileNames = new HashMap<>();
     }
 
-    public void export(List<T> studies, Path outputDirectory) {
+    public void export(List<T> studies, Path outputDirectory) throws FileNotFoundException {
         logger.info("Exporting {} studies to {} ...", studies.size(), outputDirectory);
-        try {
-            for (T study : studies) {
-                Database database = transformer.transform(study);
-                Path studyOutputFilePath = getStudyOutputFilePath(outputDirectory, study);
-                outputFileNames.put(study, studyOutputFilePath);
-                marshaller.marshall(database, new FileOutputStream(studyOutputFilePath.toFile()));
-            }
-            logger.info("Done");
-        } catch (FileNotFoundException e) {
-            logger.error("Cannot create output file: {}", e.getMessage());
+
+        for (T study : studies) {
+            Database database = transformer.transform(study);
+            Path studyOutputFilePath = getStudyOutputFilePath(outputDirectory, study);
+            outputFileNames.put(study, studyOutputFilePath);
+            marshaller.marshall(database, new FileOutputStream(studyOutputFilePath.toFile()));
         }
+        
+        logger.info("Done");
     }
 
     protected abstract Path getStudyOutputFilePath(Path outputDirectory, T study);

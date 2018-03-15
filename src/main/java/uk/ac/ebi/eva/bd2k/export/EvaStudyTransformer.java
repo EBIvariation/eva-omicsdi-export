@@ -35,15 +35,12 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     private static final Logger logger = LoggerFactory.getLogger(EvaStudyTransformer.class);
 
-    public static final String SPECIES = "species";
+    public static final String GENOMICS = "Genomics";
 
-    public static final String FULL_DATASET_LINK = "full_dataset_link";
+    public static final String EUROPEAN_VARIATION_ARCHIVE = "European Variation Archive";
 
-    public static final String INSTRUMENT_PLATFORM = "instrument_platform";
-
-    public static final String TECHNOLOGY_TYPE = "technology_type";
-
-    public static final String PUBLICATION_DATE = "publication";
+    public static final String DATABASE_DESCRIPTION = "The European Variation Archive is an open-access database of " +
+            "all types of genetic variation data from all species";
 
     public static final String EVA_FIRST_PUBLISHED_DATE = "2014-10-20";
 
@@ -63,16 +60,19 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         Entry entry = new Entry();
 
         entry.setId(variantStudy.getId());
+        entry.setAcc(variantStudy.getId());
         entry.setName(variantStudy.getName());
         entry.setDescription(variantStudy.getDescription());
-        entry.setAuthors(variantStudy.getCenter());
 
         entry.addDate(new Date(PUBLICATION_DATE, getPublicationDate(variantStudy)));
 
+        entry.addAdditionalField(OMICS_TYPE, GENOMICS);
+        entry.addAdditionalField(REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
         entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getExperimentType());
+        entry.addAdditionalField(SUBMITTER, variantStudy.getCenter());
 
         return entry;
     }
@@ -81,7 +81,8 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
     protected Database buildSingleEntryDatabase(Entry entry) {
         Database database = new Database();
 
-        database.setName("EVA");
+        database.setName(EUROPEAN_VARIATION_ARCHIVE);
+        database.setDescription(DATABASE_DESCRIPTION);
         database.setRelease(LocalDate.now().toString());
         database.setReleaseDate(LocalDate.now().toString());
         database.setEntries(Collections.singletonList(entry));

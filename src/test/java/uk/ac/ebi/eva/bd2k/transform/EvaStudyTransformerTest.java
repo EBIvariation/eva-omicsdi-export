@@ -32,15 +32,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.DATABASE_DESCRIPTION;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EUROPEAN_VARIATION_ARCHIVE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
+import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.GENOMICS;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.INSTRUMENT_PLATFORM;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.PUBLICATION_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.SPECIES;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.TECHNOLOGY_TYPE;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.OMICS_TYPE;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.REPOSITORY;
+import static uk.ac.ebi.eva.bd2k.export.StudyTransformer.SUBMITTER;
 
-public class StudyTransformerTest {
+public class EvaStudyTransformerTest {
 
     public static final String EVA_STUDY_PUBLICATION_DATE = "2017-01-01";
 
@@ -67,16 +74,17 @@ public class StudyTransformerTest {
 
         Database database = studyTransformer.transform(variantStudy);
 
-        assertEquals("EVA", database.getName());
+        assertEquals(EUROPEAN_VARIATION_ARCHIVE, database.getName());
+        assertEquals(DATABASE_DESCRIPTION, database.getDescription());
         assertEquals(LocalDate.now().toString(), database.getRelease());
         assertEquals(LocalDate.now().toString(), database.getReleaseDate());
         assertEquals(1, database.getEntryCount().intValue());
 
         Entry entry = database.getEntries().getEntry().get(0);
         assertEquals(variantStudy.getId(), entry.getId());
+        assertEquals(variantStudy.getId(), entry.getAcc());
         assertEquals(variantStudy.getName(), entry.getName().getValue());
         assertEquals(variantStudy.getDescription(), entry.getDescription());
-        assertEquals(variantStudy.getCenter(), entry.getAuthors());
         assertEquals(EVA_STUDY_PUBLICATION_DATE, entry.getDates().getDateByKey(PUBLICATION_DATE).getValue());
 
         AdditionalFields additionalFields = entry.getAdditionalFields();
@@ -85,6 +93,9 @@ public class StudyTransformerTest {
         assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, variantStudy.getUrl().toString());
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
+        assertFieldsContainsAttribute(fields, OMICS_TYPE, GENOMICS);
+        assertFieldsContainsAttribute(fields, REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
+        assertFieldsContainsAttribute(fields, SUBMITTER, variantStudy.getCenter());
         // TODO: publications
     }
 

@@ -15,6 +15,8 @@
  */
 package uk.ac.ebi.eva.bd2k;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -35,14 +37,22 @@ import java.nio.file.Paths;
 @Component
 public class StudyExporterCommandLineRunner implements CommandLineRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(StudyExporterCommandLineRunner.class);
+
     @Autowired
     private ExporterConfigurationProperties exporterConfiguration;
 
     @Override
     public void run(String... strings) throws Exception {
-        ProjectClient projectClient = new ProjectEnaWSClient(exporterConfiguration.getEnaProjectUrl(), new RestTemplate());
-        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(projectClient), new OmicsDataMarshaller());
-        StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate());
-        exporter.export(studyEvaWSClient.getAllStudies(), Paths.get(exporterConfiguration.getOutputDirectory()));
+        try {
+            ProjectClient projectClient = new ProjectEnaWSClient(exporterConfiguration.getEnaProjectUrl(), new RestTemplate());
+            StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(projectClient), new OmicsDataMarshaller());
+            StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate());
+            exporter.export(studyEvaWSClient.getAllStudies(), Paths.get(exporterConfiguration.getOutputDirectory()));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            logger.debug("", e);
+            System.exit(1);
+        }
     }
 }
