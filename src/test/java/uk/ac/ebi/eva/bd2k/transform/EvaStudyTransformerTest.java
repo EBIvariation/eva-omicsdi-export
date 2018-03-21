@@ -74,7 +74,7 @@ public class EvaStudyTransformerTest {
 
         Database database = studyTransformer.transform(variantStudy);
 
-        assertEquals(EUROPEAN_VARIATION_ARCHIVE, database.getName());
+        assertEquals("EVA", database.getName());
         assertEquals(DATABASE_DESCRIPTION, database.getDescription());
         assertEquals(LocalDate.now().toString(), database.getRelease());
         assertEquals(LocalDate.now().toString(), database.getReleaseDate());
@@ -94,7 +94,7 @@ public class EvaStudyTransformerTest {
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
         assertFieldsContainsAttribute(fields, OMICS_TYPE, GENOMICS);
-        assertFieldsContainsAttribute(fields, REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
+        assertFieldsContainsAttribute(fields, REPOSITORY, "EVA");
         assertFieldsContainsAttribute(fields, SUBMITTER, variantStudy.getCenter());
         // TODO: publications
     }
