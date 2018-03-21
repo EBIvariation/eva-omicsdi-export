@@ -37,7 +37,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     public static final String GENOMICS = "Genomics";
 
-    public static final String EUROPEAN_VARIATION_ARCHIVE = "European Variation Archive";
+    public static final String EUROPEAN_VARIATION_ARCHIVE = "EVA";
 
     public static final String DATABASE_DESCRIPTION = "The European Variation Archive is an open-access database of " +
             "all types of genetic variation data from all species";
