@@ -28,15 +28,12 @@ import uk.ac.ebi.eva.bd2k.model.EnaProject;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
 import java.net.URI;
-import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.DATABASE_DESCRIPTION;
-import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EUROPEAN_VARIATION_ARCHIVE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.GENOMICS;
@@ -60,6 +57,8 @@ public class EvaStudyTransformerTest {
 
     private VariantStudy variantStudy;
 
+    private String evaWebUrlRoot;
+
     private String evaWebUrl;
 
 
@@ -71,7 +70,8 @@ public class EvaStudyTransformerTest {
         variantStudy = new VariantStudy("S1", "Study 1", "This is the study 1", "EBI", "Homo sapiens",
                                         new URI("http://www.study1.org"), "Illumina", "Case-Control");
 
-        evaWebUrl = "http://eva-host/eva/?eva-study=S1";
+        evaWebUrlRoot = "http://eva-host/eva/?eva-study=";
+        evaWebUrl = evaWebUrlRoot + "{0}";
     }
 
     @Test
@@ -96,7 +96,7 @@ public class EvaStudyTransformerTest {
         AdditionalFields additionalFields = entry.getAdditionalFields();
         List<Field> fields = additionalFields.getField();
         assertFieldsContainsAttribute(fields, SPECIES, variantStudy.getSpeciesScientificName());
-        assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, evaWebUrl);
+        assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, evaWebUrlRoot + variantStudy.getId());
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
         assertFieldsContainsAttribute(fields, OMICS_TYPE, GENOMICS);
