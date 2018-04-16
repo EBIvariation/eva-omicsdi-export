@@ -32,10 +32,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.DATABASE_DESCRIPTION;
-import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EUROPEAN_VARIATION_ARCHIVE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.EVA_FIRST_PUBLISHED_DATE;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.FULL_DATASET_LINK;
 import static uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer.GENOMICS;
@@ -59,6 +57,11 @@ public class EvaStudyTransformerTest {
 
     private VariantStudy variantStudy;
 
+    private String evaWebUrlRoot;
+
+    private String evaWebUrl;
+
+
     @Before
     public void setUp() throws Exception {
         projectClientMock = projectId -> new EnaProject(projectId, EVA_STUDY_PUBLICATION_DATE);
@@ -66,11 +69,14 @@ public class EvaStudyTransformerTest {
 
         variantStudy = new VariantStudy("S1", "Study 1", "This is the study 1", "EBI", "Homo sapiens",
                                         new URI("http://www.study1.org"), "Illumina", "Case-Control");
+
+        evaWebUrlRoot = "http://eva-host/eva/?eva-study=";
+        evaWebUrl = evaWebUrlRoot + "{0}";
     }
 
     @Test
     public void transform() throws Exception {
-        EvaStudyTransformer studyTransformer = new EvaStudyTransformer(projectClientMock);
+        EvaStudyTransformer studyTransformer = new EvaStudyTransformer(projectClientMock, evaWebUrl);
 
         Database database = studyTransformer.transform(variantStudy);
 
@@ -90,7 +96,7 @@ public class EvaStudyTransformerTest {
         AdditionalFields additionalFields = entry.getAdditionalFields();
         List<Field> fields = additionalFields.getField();
         assertFieldsContainsAttribute(fields, SPECIES, variantStudy.getSpeciesScientificName());
-        assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, variantStudy.getUrl().toString());
+        assertFieldsContainsAttribute(fields, FULL_DATASET_LINK, evaWebUrlRoot + variantStudy.getId());
         assertFieldsContainsAttribute(fields, INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         assertFieldsContainsAttribute(fields, TECHNOLOGY_TYPE, variantStudy.getExperimentType());
         assertFieldsContainsAttribute(fields, OMICS_TYPE, GENOMICS);
@@ -101,7 +107,7 @@ public class EvaStudyTransformerTest {
 
     @Test
     public void testNoDatePreviousToEvaIsUsed() throws Exception {
-        EvaStudyTransformer studyTransformer = new EvaStudyTransformer(preEvaProjectClientMock);
+        EvaStudyTransformer studyTransformer = new EvaStudyTransformer(preEvaProjectClientMock, evaWebUrl);
 
         Database database = studyTransformer.transform(variantStudy);
         Entry entry = database.getEntries().getEntry().get(0);

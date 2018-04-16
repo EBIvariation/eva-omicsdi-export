@@ -41,7 +41,7 @@ public abstract class StudyTransformer<T> {
 
     public static final String SUBMITTER = "submitter";
 
-    public Database transform (T study){
+    public Database transform(T study){
         Entry entry = transformStudy(study);
         Database database = buildSingleEntryDatabase(entry);
         return database;
