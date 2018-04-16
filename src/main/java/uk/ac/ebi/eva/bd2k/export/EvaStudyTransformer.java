@@ -25,6 +25,7 @@ import uk.ac.ebi.eva.bd2k.client.ProjectClient;
 import uk.ac.ebi.eva.bd2k.model.EnaProject;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
+import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.Collections;
 
@@ -46,11 +47,13 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
 
     private final ProjectClient enaProjectClient;
 
+    private final String evaStudyWebUrl;
+
     private final LocalDate evaFirstPublishedDate;
 
-    public EvaStudyTransformer(
-            ProjectClient projectClient) {
+    public EvaStudyTransformer(ProjectClient projectClient, String evaStudyWebUrl) {
         this.enaProjectClient = projectClient;
+        this.evaStudyWebUrl = evaStudyWebUrl;
         this.evaFirstPublishedDate = LocalDate.parse(EVA_FIRST_PUBLISHED_DATE);
     }
 
@@ -69,7 +72,7 @@ public class EvaStudyTransformer extends StudyTransformer<VariantStudy> {
         entry.addAdditionalField(OMICS_TYPE, GENOMICS);
         entry.addAdditionalField(REPOSITORY, EUROPEAN_VARIATION_ARCHIVE);
         entry.addAdditionalField(SPECIES, variantStudy.getSpeciesScientificName());
-        entry.addAdditionalField(FULL_DATASET_LINK, variantStudy.getUrl().toString());
+        entry.addAdditionalField(FULL_DATASET_LINK, MessageFormat.format(evaStudyWebUrl, variantStudy.getId()));
         entry.addAdditionalField(INSTRUMENT_PLATFORM, variantStudy.getPlatform());
         entry.addAdditionalField(TECHNOLOGY_TYPE, variantStudy.getExperimentType());
         entry.addAdditionalField(SUBMITTER, variantStudy.getCenter());

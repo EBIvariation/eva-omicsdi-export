@@ -22,18 +22,28 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "omicsdi")
 public class ExporterConfigurationProperties {
 
-    private String evaStudiesUrl;
+    private String evaStudiesApiUrl;
 
-    private String enaProjectUrl;
+    private String evaStudyWebUrl;
+
+    private String enaProjectApiUrl;
 
     private String outputDirectory;
 
-    public String getEvaStudiesUrl() {
-        return evaStudiesUrl;
+    public String getEvaStudiesApiUrl() {
+        return evaStudiesApiUrl;
     }
 
-    public void setEvaStudiesUrl(String evaStudiesUrl) {
-        this.evaStudiesUrl = evaStudiesUrl;
+    public void setEvaStudiesApiUrl(String evaStudiesApiUrl) {
+        this.evaStudiesApiUrl = evaStudiesApiUrl;
+    }
+
+    public String getEvaStudyWebUrl() {
+        return evaStudyWebUrl;
+    }
+
+    public void setEvaStudyWebUrl(String evaStudyWebUrl) {
+        this.evaStudyWebUrl = evaStudyWebUrl;
     }
 
     public String getOutputDirectory() {
@@ -44,11 +54,11 @@ public class ExporterConfigurationProperties {
         this.outputDirectory = outputDirectory;
     }
 
-    public String getEnaProjectUrl() {
-        return enaProjectUrl;
+    public String getEnaProjectApiUrl() {
+        return enaProjectApiUrl;
     }
 
-    public void setEnaProjectUrl(String enaProjectUrl) {
-        this.enaProjectUrl = enaProjectUrl;
+    public void setEnaProjectApiUrl(String enaProjectApiUrl) {
+        this.enaProjectApiUrl = enaProjectApiUrl;
     }
 }

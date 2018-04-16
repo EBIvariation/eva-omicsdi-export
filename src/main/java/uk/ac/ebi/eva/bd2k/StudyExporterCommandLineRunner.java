@@ -45,9 +45,13 @@ public class StudyExporterCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         try {
-            ProjectClient projectClient = new ProjectEnaWSClient(exporterConfiguration.getEnaProjectUrl(), new RestTemplate());
-            StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(projectClient), new OmicsDataMarshaller());
-            StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesUrl(), new RestTemplate());
+            ProjectClient projectClient = new ProjectEnaWSClient(exporterConfiguration.getEnaProjectApiUrl(),
+                                                                 new RestTemplate());
+            StudyExporter<VariantStudy> exporter = new EvaStudyExporter(
+                    new EvaStudyTransformer(projectClient, exporterConfiguration.getEvaStudyWebUrl()),
+                    new OmicsDataMarshaller());
+            StudyEvaWSClient studyEvaWSClient = new StudyEvaWSClient(exporterConfiguration.getEvaStudiesApiUrl(),
+                                                                     new RestTemplate());
             exporter.export(studyEvaWSClient.getAllStudies(), Paths.get(exporterConfiguration.getOutputDirectory()));
         } catch (Exception e) {
             logger.error(e.getMessage());

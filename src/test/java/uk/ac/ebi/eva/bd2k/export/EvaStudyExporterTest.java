@@ -52,6 +52,9 @@ public class EvaStudyExporterTest {
 
     private VariantStudy study2;
 
+    private String evaWebUrl;
+
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
@@ -62,14 +65,15 @@ public class EvaStudyExporterTest {
         study2 = new VariantStudy(STUDY_2_ID, "study 2", "Study 2 desc", "EBI", "Homo Sapiens",
                                   new URI("www.study2.org"), "Illumina", "Case-Control");
 
+        evaWebUrl = "http://eva-host/eva/?eva-study={0}";
         marshaller = mock(OmicsDataMarshaller.class);
-
         enaProjectClientMock = studyId -> new EnaProject(studyId, "2017-01-01");
     }
 
     @Test
     public void export() throws Exception {
-        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(new EvaStudyTransformer(enaProjectClientMock), marshaller);
+        StudyExporter<VariantStudy> exporter = new EvaStudyExporter(
+                new EvaStudyTransformer(enaProjectClientMock, evaWebUrl), marshaller);
         System.out.println("temporaryFolder = " + temporaryFolder.getRoot().toString());
         Path outputDirectory = temporaryFolder.getRoot().toPath();
         exporter.export(Arrays.asList(study1, study2), outputDirectory);

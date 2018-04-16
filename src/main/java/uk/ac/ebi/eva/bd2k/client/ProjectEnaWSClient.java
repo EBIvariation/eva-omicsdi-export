@@ -33,14 +33,14 @@ public class ProjectEnaWSClient implements ProjectClient {
 
     private static final String ENA_FIRST_PUBLIC = "ENA-FIRST-PUBLIC";
 
-    private final String projectServiceUrl;
+    private final String projectApiUrl;
 
     private final RestTemplate restTemplate;
 
     private ProjectType enaProjectType;
 
-    public ProjectEnaWSClient(String projectServiceUrl, RestTemplate restTemplate) {
-        this.projectServiceUrl = projectServiceUrl;
+    public ProjectEnaWSClient(String projectApiUrl, RestTemplate restTemplate) {
+        this.projectApiUrl = projectApiUrl;
         this.restTemplate = restTemplate;
         HttpMessageConverter<ProjectType> messageConverter = new ProjectHttpMessageConverter();
         this.restTemplate.setMessageConverters(Collections.singletonList(messageConverter));
@@ -48,7 +48,7 @@ public class ProjectEnaWSClient implements ProjectClient {
 
     @Override
     public EnaProject getProject(String projectId) {
-        enaProjectType = restTemplate.getForObject(projectServiceUrl, ProjectType.class, projectId);
+        enaProjectType = restTemplate.getForObject(projectApiUrl, ProjectType.class, projectId);
         return new EnaProject(projectId, getPublicationDate(enaProjectType, projectId));
     }
 

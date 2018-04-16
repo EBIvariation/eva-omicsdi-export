@@ -36,21 +36,21 @@ public class StudyEvaWSClient implements StudyClient {
 
     private static final Logger logger = LoggerFactory.getLogger(StudyEvaWSClient.class);
 
-    private String studyWsUrl;
+    private String studyApiUrl;
 
     private RestTemplate restTemplate;
 
-    public StudyEvaWSClient(String studyWsUrl, RestTemplate restTemplate) {
-        this.studyWsUrl = studyWsUrl;
+    public StudyEvaWSClient(String studyApiUrl, RestTemplate restTemplate) {
+        this.studyApiUrl = studyApiUrl;
         this.restTemplate = restTemplate;
     }
 
     @Override
     public List<VariantStudy> getAllStudies() {
         try {
-            logger.info("Retrieving all studies from {} ...", studyWsUrl);
+            logger.info("Retrieving all studies from {} ...", studyApiUrl);
             ResponseEntity<QueryResponse<QueryResult<VariantStudy>>> response = restTemplate
-                    .exchange(studyWsUrl, HttpMethod.GET, null,
+                    .exchange(studyApiUrl, HttpMethod.GET, null,
                               new ParameterizedTypeReference<QueryResponse<QueryResult<VariantStudy>>>() {
                               });
             QueryResult<VariantStudy> queryResult = response.getBody().getResponse().get(0);
