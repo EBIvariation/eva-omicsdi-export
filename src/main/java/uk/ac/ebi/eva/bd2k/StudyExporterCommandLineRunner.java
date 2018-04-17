@@ -32,6 +32,7 @@ import uk.ac.ebi.eva.bd2k.export.EvaStudyTransformer;
 import uk.ac.ebi.eva.bd2k.export.StudyExporter;
 import uk.ac.ebi.eva.bd2k.model.VariantStudy;
 
+import java.io.File;
 import java.nio.file.Paths;
 
 @Component
@@ -45,6 +46,7 @@ public class StudyExporterCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... strings) throws Exception {
         try {
+            cleanupOutputDirectory(exporterConfiguration.getOutputDirectory());
             ProjectClient projectClient = new ProjectEnaWSClient(exporterConfiguration.getEnaProjectApiUrl(),
                                                                  new RestTemplate());
             StudyExporter<VariantStudy> exporter = new EvaStudyExporter(
@@ -57,6 +59,19 @@ public class StudyExporterCommandLineRunner implements CommandLineRunner {
             logger.error(e.getMessage());
             logger.debug("", e);
             System.exit(1);
+        }
+    }
+
+    /**
+     * In order to avoid keeping files from deprecated studies, the XML files in the output directory are deleted. Any
+     * other files or directories are not affected by this operation.
+     *
+     * @param outputDirectory Directory where the output files are stored
+     */
+    private void cleanupOutputDirectory(String outputDirectory) {
+        for (File f : Paths.get(outputDirectory).toFile().listFiles((f, name) -> name.matches("^PRJ.*.xml$"))) {
+            f.delete();
+            logger.info("File {} deleted", f.getName());
         }
     }
 }
