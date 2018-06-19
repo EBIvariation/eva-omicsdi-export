@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -101,7 +102,7 @@ public class EvaStudyExporterTest {
 
         assertEquals(outputDirectory.resolve(STUDY_1_ID + ".xml"), exporter.getStudyOutputFilePath(study1));
         assertEquals(outputDirectory.resolve(STUDY_2_ID + ".xml"), exporter.getStudyOutputFilePath(study2));
-        assertEquals(null, exporter.getStudyOutputFilePath(privateStudy));
+        assertNull(exporter.getStudyOutputFilePath(privateStudy));
     }
 
 }
