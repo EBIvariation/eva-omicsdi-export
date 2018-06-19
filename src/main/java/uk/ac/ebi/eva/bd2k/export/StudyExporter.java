@@ -51,10 +51,15 @@ public abstract class StudyExporter<T> {
         logger.info("Exporting {} studies to {} ...", studies.size(), outputDirectory);
 
         for (T study : studies) {
-            Database database = transformer.transform(study);
-            Path studyOutputFilePath = getStudyOutputFilePath(outputDirectory, study);
-            outputFileNames.put(study, studyOutputFilePath);
-            marshaller.marshall(database, new FileOutputStream(studyOutputFilePath.toFile()));
+            try {
+                Database database = transformer.transform(study);
+                Path studyOutputFilePath = getStudyOutputFilePath(outputDirectory, study);
+                outputFileNames.put(study, studyOutputFilePath);
+                marshaller.marshall(database, new FileOutputStream(studyOutputFilePath.toFile()));
+            } catch (Exception e) {
+                logger.error("Cannot export study {}: {}", study, e.getLocalizedMessage());
+                logger.warn("Skipping study {} ...", study);
+            }
         }
         
         logger.info("Done");

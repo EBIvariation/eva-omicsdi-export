@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
@@ -44,6 +45,8 @@ public class EvaStudyExporterTest {
 
     private static final String STUDY_2_ID = "s2";
 
+    private static final String PRIVATE_STUDY_ID = "PRIVATE_PROJECT";
+
     private OmicsDataMarshaller marshaller;
 
     private ProjectClient enaProjectClientMock;
@@ -52,8 +55,9 @@ public class EvaStudyExporterTest {
 
     private VariantStudy study2;
 
-    private String evaWebUrl;
+    private VariantStudy privateStudy;
 
+    private String evaWebUrl;
 
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -64,10 +68,18 @@ public class EvaStudyExporterTest {
                                   new URI("www.study1.org"), "Illumina", "Case-Control");
         study2 = new VariantStudy(STUDY_2_ID, "study 2", "Study 2 desc", "EBI", "Homo Sapiens",
                                   new URI("www.study2.org"), "Illumina", "Case-Control");
+        privateStudy = new VariantStudy(PRIVATE_STUDY_ID, "Private project", "Private project desc", "EBI",
+                                        "Homo Sapiens", new URI("www.private-project.org"), "Illumina", "Case-Control");
 
         evaWebUrl = "http://eva-host/eva/?eva-study={0}";
         marshaller = mock(OmicsDataMarshaller.class);
-        enaProjectClientMock = studyId -> new EnaProject(studyId, "2017-01-01");
+        enaProjectClientMock = studyId -> {
+            if (studyId.equals(PRIVATE_STUDY_ID)) {
+                throw new RuntimeException("The project is private and cannot be exported");
+            } else {
+                return new EnaProject(studyId, "2017-01-01");
+            }
+        };
     }
 
     @Test
@@ -76,7 +88,7 @@ public class EvaStudyExporterTest {
                 new EvaStudyTransformer(enaProjectClientMock, evaWebUrl), marshaller);
         System.out.println("temporaryFolder = " + temporaryFolder.getRoot().toString());
         Path outputDirectory = temporaryFolder.getRoot().toPath();
-        exporter.export(Arrays.asList(study1, study2), outputDirectory);
+        exporter.export(Arrays.asList(study1, study2, privateStudy), outputDirectory);
 
         verify(marshaller, times(1))
                 .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(STUDY_1_ID)),
@@ -84,9 +96,13 @@ public class EvaStudyExporterTest {
         verify(marshaller, times(1))
                 .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(STUDY_2_ID)),
                           any(OutputStream.class));
+        verify(marshaller, times(0))
+                .marshall(argThat(d -> ((Database) d).getEntries().getEntry().get(0).getId().equals(PRIVATE_STUDY_ID)),
+                          any(OutputStream.class));
 
         assertEquals(outputDirectory.resolve(STUDY_1_ID + ".xml"), exporter.getStudyOutputFilePath(study1));
         assertEquals(outputDirectory.resolve(STUDY_2_ID + ".xml"), exporter.getStudyOutputFilePath(study2));
+        assertNull(exporter.getStudyOutputFilePath(privateStudy));
     }
 
 }
