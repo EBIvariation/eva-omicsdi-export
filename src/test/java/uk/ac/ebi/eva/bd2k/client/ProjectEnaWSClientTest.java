@@ -15,8 +15,7 @@
  */
 package uk.ac.ebi.eva.bd2k.client;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -54,41 +53,20 @@ public class ProjectEnaWSClientTest {
 
     private static final String PRIVATE_PROJECT_ID = "PRJEBPRIVATE";
 
-    private static ProjectEnaWSClient enaProjectWSClient;
-
-    private static MockRestServiceServer server;
+    private MockRestServiceServer server;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @BeforeClass
-    public static void setUpClass() throws Exception {
-        // XML files that are returned by ENA WS
-        String xmlTestFileBody = Files.readAllLines(
-                Paths.get(ProjectEnaWSClientTest.class.getResource("/project-ws-response.xml").toURI())).stream()
-                                      .reduce((s, s2) -> s + s2).get();
-        String privateProjectXmlBody = Files.readAllLines(
-                Paths.get(ProjectEnaWSClientTest.class.getResource("/private-project.xml").toURI())).stream()
-                                            .reduce((s, s2) -> s + s2).get();
-
-        RestTemplate restTemplate = new RestTemplate();
-        server = MockRestServiceServer.bindTo(restTemplate).build();
-
-        server.expect(ExpectedCount.times(2), requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID)))
-              .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
-        server.expect(ExpectedCount.times(1), requestTo(PROJECT_WS_URL.replace("{projectId}", PRIVATE_PROJECT_ID)))
-              .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(privateProjectXmlBody, MediaType.APPLICATION_XML));
-
-        enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
-    }
-
-    @AfterClass
-    public static void verifyServerCalls() throws Exception {
+    @After
+    public void verifyServerCalls() throws Exception {
         server.verify();
     }
 
     @Test
     public void getProjectType() throws Exception {
+        ProjectEnaWSClient enaProjectWSClient = createClientBoundToMockServer("project-ws-response.xml", PROJECT_ID);
+
         enaProjectWSClient.getProject(PROJECT_ID);
         ProjectType project = enaProjectWSClient.getEnaProjectType();
 
@@ -154,6 +132,7 @@ public class ProjectEnaWSClientTest {
 
     @Test
     public void getProject() throws Exception {
+        ProjectEnaWSClient enaProjectWSClient = createClientBoundToMockServer("project-ws-response.xml", PROJECT_ID);
         EnaProject project = enaProjectWSClient.getProject(PROJECT_ID);
 
         assertEquals(PROJECT_ID, project.getId());
@@ -161,8 +140,24 @@ public class ProjectEnaWSClientTest {
     }
 
     @Test
-    public void privateProjectWillProduceException() {
+    public void privateProjectWillProduceException() throws Exception {
+        ProjectEnaWSClient enaProjectWSClient = createClientBoundToMockServer("private-project.xml",
+                                                                              PRIVATE_PROJECT_ID);
         thrown.expect(HttpMessageNotReadableException.class);
         enaProjectWSClient.getProject(PRIVATE_PROJECT_ID);
+    }
+
+    private ProjectEnaWSClient createClientBoundToMockServer(String fileName, String projectId) throws Exception {
+        String xmlTestFileBody = Files.readAllLines(
+                Paths.get(ProjectEnaWSClientTest.class.getResource("/" + fileName).toURI())).stream()
+                                      .reduce((s, s2) -> s + s2).get();
+
+        RestTemplate restTemplate = new RestTemplate();
+        server = MockRestServiceServer.bindTo(restTemplate).build();
+
+        server.expect(ExpectedCount.times(1), requestTo(PROJECT_WS_URL.replace("{projectId}", projectId)))
+              .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
+
+        return new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
     }
 }
