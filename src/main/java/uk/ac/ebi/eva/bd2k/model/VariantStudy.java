@@ -131,4 +131,9 @@ public class VariantStudy {
     public int hashCode() {
         return id.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return id;
+    }
 }

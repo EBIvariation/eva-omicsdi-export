@@ -17,9 +17,12 @@ package uk.ac.ebi.eva.bd2k.client;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -49,20 +52,32 @@ public class ProjectEnaWSClientTest {
 
     private static final String PROJECT_ID = "PRJEB6042";
 
+    private static final String PRIVATE_PROJECT_ID = "PRJEBPRIVATE";
+
     private static ProjectEnaWSClient enaProjectWSClient;
 
     private static MockRestServiceServer server;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @BeforeClass
     public static void setUpClass() throws Exception {
+        // XML files that are returned by ENA WS
         String xmlTestFileBody = Files.readAllLines(
                 Paths.get(ProjectEnaWSClientTest.class.getResource("/project-ws-response.xml").toURI())).stream()
                                       .reduce((s, s2) -> s + s2).get();
+        String privateProjectXmlBody = Files.readAllLines(
+                Paths.get(ProjectEnaWSClientTest.class.getResource("/private-project.xml").toURI())).stream()
+                                            .reduce((s, s2) -> s + s2).get();
+
         RestTemplate restTemplate = new RestTemplate();
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
         server.expect(ExpectedCount.times(2), requestTo(PROJECT_WS_URL.replace("{projectId}", PROJECT_ID)))
               .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(xmlTestFileBody, MediaType.APPLICATION_XML));
+        server.expect(ExpectedCount.times(1), requestTo(PROJECT_WS_URL.replace("{projectId}", PRIVATE_PROJECT_ID)))
+              .andExpect(method(HttpMethod.GET)).andRespond(withSuccess(privateProjectXmlBody, MediaType.APPLICATION_XML));
 
         enaProjectWSClient = new ProjectEnaWSClient(PROJECT_WS_URL, restTemplate);
     }
@@ -143,5 +158,11 @@ public class ProjectEnaWSClientTest {
 
         assertEquals(PROJECT_ID, project.getId());
         assertEquals("2014-04-04", project.getPublicationDate());
+    }
+
+    @Test
+    public void privateProjectWillProduceException() {
+        thrown.expect(HttpMessageNotReadableException.class);
+        enaProjectWSClient.getProject(PRIVATE_PROJECT_ID);
     }
 }
